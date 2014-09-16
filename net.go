@@ -47,14 +47,14 @@ func read(name string) []byte {
 	return fo
 }
 
-func getMon(ID int) []byte {
+func PADHGet(endP string, ID int) []byte {
 	tr := &http.Transport {
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 	}
 
 	client := &http.Client{Transport: tr}
 
-	resp, err := client.Get(fmt.Sprintf("http://padherder.com/user-api/monster/%d/",ID))
+	resp, err := client.Get(fmt.Sprintf("http://padherder.com/user-api/%s/%d/", endP,ID))
 
 	if err != nil {	panic (err) }
 

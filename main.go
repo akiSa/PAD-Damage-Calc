@@ -2,10 +2,24 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
-	"math"
+//	"fmt"
+	"strings"
+	"strconv"
+//	"math"
+	
+	"github.com/gorilla/mux"
+	"github.com/gorilla/websocket"
+
+	"net/http"
+
+	"log"
 )
 
+const (
+	plusHP = 10
+	plusATK = 5
+	plusRCV = 3
+)
 var MonMap map[int]*Monster
 var AwkMap map[int]*Awakenings
 var LdrMap map[string]*LeaderSkill
@@ -52,85 +66,80 @@ func init () {
 	//MonsterList 
 }
 
+func teamHandler(res http.ResponseWriter, req *http.Request) {
+	var err error;
+	var msg *orbs
+	var dmg []float64
+	var teamD []teamDamage
+	//var comboCount, comboMulti float64 
+	log.Printf(req.URL.String())
+	teamID, err := strconv.Atoi(strings.Split(req.URL.String(),"/")[2])
+	if err != nil { panic(err) }
+
+	//log.Println(teamID)
+	
+	ws, _ := websocket.Upgrade(res, req, nil, 1024, 1024)
+	log.Printf("got websocket conn from %v\n", ws.RemoteAddr())
+
+	team := TeamLookup(teamID)
+
+	err = ws.WriteJSON(team)
+	if err != nil { panic(err) }
+	for {
+		msg = new (orbs)
+		//dmg = new ([]float64)
+		dmg = make([]float64, 6, 6)
+		//dmg = new ([6]float64)
+		teamD = make ([]teamDamage, 6, 6)
+		// comboCount = 0
+		// comboMulti = 0
+		
+		if err = ws.ReadJSON(msg); err != nil {
+			panic(err)
+		}
+		
+		//Do da maff, return da damage, given team (which is team info)
+		teamD =  damageResolve(team,teamD,dmg,msg)
+
+
+		//teamD = damageResolve (team, teamD, dmg, comboMulti)
+
+		ws.WriteJSON(teamD)
+	}
+	
+}
+
+
 func main () {
-	// r := mux.NewRouter()
-	// r.HandleFunc("/ws", remoteHandler)
-	// r.PathPrefix("/").Handler(http.FileServer(http.Dir("./html/")))
-	// http.ListenAndServe(":8080", r)
+	//I wanna test some shit
+	team := TeamLookup(77475)
+	//var dmg [6]float64
+	msg := new (orbs)
+	
+	dmg := make([]float64, 6, 6)
+	teamD := make ([]teamDamage, 6, 6)
+
+	msg.Light = []float64{ 3, 3 }
+	msg.Fire = []float64{3}
+	msg.Water = []float64{3}
+	msg.Heart = []float64{3}
+
+	teamD = damageResolve(team, teamD, dmg, msg)
+
+	log.Println(u_PPJson(teamD, "", " "))
+	log.Printf("Starting server")
+	r := mux.NewRouter()
+	r.HandleFunc("/team/{id:[0-9]+/}", teamHandler)
+	//r.PathPrefix("/").Handler(http.FileServer(http.Dir("./html/")))
+	http.ListenAndServe(":8080", r)
 
 
 	//fmt.Println(MonMap[752].Name)
 
-	fmt.Println(Lookup(1781703))
+
+	//fmt.Println(Lookup(1781703))
+
+	//fmt.Println(u_PPJson(TeamLookup(77475),""," "))
 	//fmt.Println(LdrMap[MonMap[752].LeaderSkill])
 }
-
-type lookup struct {
-	ID int `json:"id"`
-	CurrAwaken int `json:"current_awakening"`
-	Awakenings []int `json:"awakenings"`
-	LeaderSkill struct {
-		HP float64 `json:"hp"`
-		ATK float64 `json:"atk"`
-		RCV float64 `json:"rcv"`
-		Conditional [2]interface{} `json:"condition"`  //annoying -_-, no condition if this is empty
-	} `json:"leader_skill"`
-	
-	Stats struct {
-		Level int `json:"level"`
-		HP int `json:"hp"`
-		ATK int `json:"atk"`
-		RCV int `json:"rcv"`
-	} `json:"stats"`
-}
-//Will return: { id, awakenings, leaderskill data, stats stuff }
-func MaxLevelExp(Curve int, MLvl int) (res int) {
-	res = int(float64(Curve) * (  math.Pow( ((float64(MLvl) - 1) * 50/49), 2.5 )  ))
-
-	return res
-}
-func Lookup (ID int) (res lookup) {
-	var monj PADHMonster
-	mon := getMon(ID)
-	err := json.Unmarshal(mon, &monj)
-	if err != nil { panic(err) }
-
-	MonID := monj.Monster
-	res.CurrAwaken = monj.CurrAwaken
-	
-	res.ID = MonMap[MonID].ID
-	res.Awakenings = MonMap[MonID].Awakenings
-	res.LeaderSkill.HP = LdrMap[MonMap[MonID].LeaderSkill].Data[0].(float64)
-	res.LeaderSkill.ATK = LdrMap[MonMap[MonID].LeaderSkill].Data[1].(float64)
-	res.LeaderSkill.RCV = LdrMap[MonMap[MonID].LeaderSkill].Data[2].(float64)
-	if len(LdrMap[MonMap[MonID].LeaderSkill].Data) >= 4 {
-		res.LeaderSkill.Conditional = LdrMap[MonMap[MonID].LeaderSkill].Data[3].([2]interface{})
-	}
-
-
-	//Stats
-	//fmt.Println(MaxLevelExp(MonMap[MonID].XPCurve, MonMap[MonID].MaxLevel))
-	
-	res.Stats.Level = int(1 + ( 98 * ( math.Pow(math.E, (math.Log( float64(monj.CurrXP/ MaxLevelExp(MonMap[MonID].XPCurve, MonMap[MonID].MaxLevel)) ) / 2.5) ) ) ))
-
-	res.Stats.HP = int(float64(MonMap[MonID].HPMin) +
-		float64( MonMap[MonID].HPMax - MonMap[MonID].HPMin ) *
-		( math.Pow(float64(res.Stats.Level - 1 ) / float64(MonMap[MonID].MaxLevel - 1), MonMap[MonID].HPScale  ) ))
-	// res.Stats.HP = float64(MonMap[MonID].HPMin) +
-	// 	math.Pow( ( float64(MonMap[MonID].HPMax) - float64(MonMap[MonID].HPMin) ), MonMap[MonID].HPScale) *
-	// 	math.Pow( ( float64(res.Stats.Level - 1) / float64(MonMap[MonID].MaxLevel -1
-	
-	return res
-}
-
-
-
-
-
-
-
-
-
-
-
 

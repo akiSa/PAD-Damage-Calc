@@ -1,5 +1,21 @@
 package main
 
+type orbs struct {
+	Fire []float64 `json:"fire"`
+	Water []float64 `json:"water"`
+	Wood []float64 `json:"wood"`
+	Dark []float64 `json:"dark"`
+	Light []float64 `json:"light"`
+	Heart []float64 `json:"heart"`
+}
+
+type teamDamage struct {
+	Damage [3]struct{
+		Element int `json:"element"`
+		Value float64 `json:"val"`
+	} `json:"damage"`
+
+}
 type PADHMonster struct {
 	ID int `json:"id"`
 	Url string `json:"url"`
@@ -12,9 +28,30 @@ type PADHMonster struct {
 	TargetLevel int `json:"target_level"`
 	TargetEvo int `json:"target_evolution"`
 	PlusHP int `json:"plus_hp"`
-	PlusAtk int `json:"plus_atk"`
+	PlusATK int `json:"plus_atk"`
 	PlusRCV int `json:"plus_rcv"`
 	
+}
+type PADHTeam struct {
+	ID int `json:"id"`
+	URL string `json:"url"`
+	Name string `json:"name"`
+	Desc string `json:"description"`
+	Fav bool `json:"favourite"`
+	Order int `json:"order"`
+	TeamGroup int `json:"team_group"`
+	Leader int `json:"leader"`
+	Sub1 int `json:"sub1"`
+	Sub2 int `json:"sub2"`
+	Sub3 int `json:"sub3"`
+	Sub4 int `json:"sub4"`
+	FLead int `json:"friend_leader"`
+	FLevel int `json:"friend_level"`
+	FHP int `json:"friend_hp"`
+	FATK int `json:"friend_atk"`
+	FRCV int `json:"friend_rcv"`
+	FSkill int `json:"friend_skill"`
+	FAwaken int `json:"friend_awakening"`
 }
 
 type Awakenings struct {

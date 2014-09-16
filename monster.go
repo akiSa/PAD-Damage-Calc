@@ -27,9 +27,9 @@ type Monster struct {
 	HPMin int `json:"hp_min"`
 	Image40Size int `json:"image40_size"`
 	ActiveSkill string `json:"active_skill"`
-	AtkMin int `json:"atk_min"`
+	ATKMin int `json:"atk_min"`
 	FeedXP float64 `json:"feed_xp"`
-	AtkMax int `json:"atk_max"`
+	ATKMax int `json:"atk_max"`
 	JPOnly bool `json:"jp_only"`
 }
 
