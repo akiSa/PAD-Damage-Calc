@@ -29,7 +29,9 @@
               console.log(entry);
             });
           
-          $scope.image.path = "http://padherder.com/"+m.team[0].image60_href
+          $scope.$apply(function() {
+              $scope.image.path = "http://padherder.com/"+m.team[0].image60_href
+            });
           // var img = new Image();
           // img.onload = function() {
           //   $scope.image.path = m
