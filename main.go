@@ -15,10 +15,22 @@ import (
 	"log"
 )
 
+/*
+The "element" and "element2" fields are { 0:Fire, 1:Water, 2:Wood, 3:Light, 4:Dark }.
+The "type" and "type2" fields are { 0:Evo Material, 1:Balanced, 2:Physical, 3:Healer, 4:Dragon, 5:God, 6:Attacker, 7:Devil, 12:Awoken Skill Material, 13:Protected, 14:Enhance Material }.
+*/
+
 const (
 	plusHP = 10
 	plusATK = 5
 	plusRCV = 3
+
+	fireRow = 22
+	waterRow = 23
+	woodRow = 24
+	lightRow = 25
+	darkRow = 26
+	
 )
 var MonMap map[int]*Monster
 var AwkMap map[int]*Awakenings
@@ -123,6 +135,13 @@ func main () {
 	msg.Fire = []float64{3}
 	msg.Water = []float64{3}
 	msg.Heart = []float64{3}
+	msg.Rows = []float64{0,0,0,0,1}
+	msg.Enhance = []float64{0,0,0,0,0}
+	//msg.Active = []interface{ string{"type"}, int{2}, int{3} }
+	msg.Active = make([]interface{},3,3)
+	msg.Active[0] = "type"
+	msg.Active[1] = 7 //devil
+	msg.Active[2] = 3 //3x
 
 	teamD = damageResolve(team, teamD, dmg, msg)
 

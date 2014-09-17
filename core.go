@@ -5,7 +5,8 @@ import (
 )
 //dmg = multiplier for the elements, 0-5 fire-heal
 //TODO: Factor in damage enhance AND row enhance, just crossreference the awakening list, hardcode what each one does basically >_>, have it auto set # of enhanced orbs on web front end, user can change.
-func damageResolve (team []lookup, teamD []teamDamage, dmg []float64, msg *orbs) (res []teamDamage) {
+//Also, factor in active skill stuff
+func damageResolve (team teamL/*[]lookup*/, teamD []teamDamage, dmg []float64, msg *orbs) (res []teamDamage) {
 	var comboMulti float64
 	var comboCount float64
 	
@@ -45,162 +46,198 @@ func damageResolve (team []lookup, teamD []teamDamage, dmg []float64, msg *orbs)
 	for x,_ := range teamD {
 		//Main attribute
 		lead,friend = false, false
-		teamD[x].Damage[0].Element = team[x].Element
-		teamD[x].Damage[0].Value = dmg[team[x].Element] * float64(team[x].Stats.ATK) * comboMulti
+		teamD[x].Damage[0].Element = team.Team[x].Element
+		teamD[x].Damage[0].Value = dmg[team.Team[x].Element] * float64(team.Team[x].Stats.ATK) * comboMulti
 		//Sub attribute
-		teamD[x].Damage[1].Element = team[x].Element2
-		if team[x].Element == team[x].Element2 { subMulti = 0.10 } else { subMulti = 0.30 }
-		teamD[x].Damage[1].Value = dmg[team[x].Element2] * (float64(team[x].Stats.ATK)*subMulti) * comboMulti
+		teamD[x].Damage[1].Element = team.Team[x].Element2
+		if team.Team[x].Element == team.Team[x].Element2 { subMulti = 0.10 } else { subMulti = 0.30 }
+		teamD[x].Damage[1].Value = dmg[team.Team[x].Element2] * (float64(team.Team[x].Stats.ATK)*subMulti) * comboMulti
 		//Heal
 		teamD[x].Damage[2].Element = 6
-		teamD[x].Damage[2].Value = dmg[5] * float64(team[x].Stats.RCV) * comboMulti
+		teamD[x].Damage[2].Value = dmg[5] * float64(team.Team[x].Stats.RCV) * comboMulti
 		//teamD
 		//team[x]
 		
 		//Leader Skill
-		switch team[0].LeaderSkill.Conditional[0] {
+		switch team.Team[0].LeaderSkill.Conditional[0] {
 		case "type":
 			//Apply only to conditional[1] types
-			if team[x].Type == team[0].LeaderSkill.Conditional[1] ||
-				team[x].Type2 == team[0].LeaderSkill.Conditional[1] {
+			if team.Team[x].Type == team.Team[0].LeaderSkill.Conditional[1] ||
+				team.Team[x].Type2 == team.Team[0].LeaderSkill.Conditional[1] {
 				if !lead {				
-					teamD[x].Damage[0].Value *= team[0].LeaderSkill.ATK
-					teamD[x].Damage[1].Value *= team[0].LeaderSkill.ATK
-					teamD[x].Damage[2].Value *= team[0].LeaderSkill.RCV
+					teamD[x].Damage[0].Value *= team.Team[0].LeaderSkill.ATK
+					teamD[x].Damage[1].Value *= team.Team[0].LeaderSkill.ATK
+					teamD[x].Damage[2].Value *= team.Team[0].LeaderSkill.RCV
 					lead = true
 				}
 				//I THINK it works like this, need to check, but I remember d/l batman enhancing his own dark attacks too
 			}
 		case "elem":
 			//Apply only to conditional[1] elements
-			if team[x].Element == team[0].LeaderSkill.Conditional[1] ||
-				team[x].Element2 == team[0].LeaderSkill.Conditional[1] {
+			if team.Team[x].Element == team.Team[0].LeaderSkill.Conditional[1] ||
+				team.Team[x].Element2 == team.Team[0].LeaderSkill.Conditional[1] {
 				
 				if !lead {
-					teamD[x].Damage[0].Value *= team[0].LeaderSkill.ATK
-					teamD[x].Damage[1].Value *= team[0].LeaderSkill.ATK
-					teamD[x].Damage[2].Value *= team[0].LeaderSkill.RCV
+					teamD[x].Damage[0].Value *= team.Team[0].LeaderSkill.ATK
+					teamD[x].Damage[1].Value *= team.Team[0].LeaderSkill.ATK
+					teamD[x].Damage[2].Value *= team.Team[0].LeaderSkill.RCV
 					lead = true
 				}
 			}
 		default:
 			//Apply to errbody
 			if !lead {
-				teamD[x].Damage[0].Value *= team[0].LeaderSkill.ATK
-				teamD[x].Damage[1].Value *= team[0].LeaderSkill.ATK
-				teamD[x].Damage[2].Value *= team[0].LeaderSkill.RCV
+				teamD[x].Damage[0].Value *= team.Team[0].LeaderSkill.ATK
+				teamD[x].Damage[1].Value *= team.Team[0].LeaderSkill.ATK
+				teamD[x].Damage[2].Value *= team.Team[0].LeaderSkill.RCV
 				lead = true
 			}
 		}
 
-		switch team[0].LeaderSkill.Conditional2[0] {
+		switch team.Team[0].LeaderSkill.Conditional2[0] {
 		case "type":
 			//Apply only to conditional[1] types
-			if team[x].Type == team[0].LeaderSkill.Conditional2[1] ||
-				team[x].Type2 == team[0].LeaderSkill.Conditional2[1] {
+			if team.Team[x].Type == team.Team[0].LeaderSkill.Conditional2[1] ||
+				team.Team[x].Type2 == team.Team[0].LeaderSkill.Conditional2[1] {
 				if !lead {				
-					teamD[x].Damage[0].Value *= team[0].LeaderSkill.ATK
-					teamD[x].Damage[1].Value *= team[0].LeaderSkill.ATK
-					teamD[x].Damage[2].Value *= team[0].LeaderSkill.RCV
+					teamD[x].Damage[0].Value *= team.Team[0].LeaderSkill.ATK
+					teamD[x].Damage[1].Value *= team.Team[0].LeaderSkill.ATK
+					teamD[x].Damage[2].Value *= team.Team[0].LeaderSkill.RCV
 					lead = true
 				}
 				//I THINK it works like this, need to check, but I remember d/l batman enhancing his own dark attacks too
 			}
 		case "elem":
 			//Apply only to conditional[1] elements
-			if team[x].Element == team[0].LeaderSkill.Conditional2[1] ||
-				team[x].Element2 == team[0].LeaderSkill.Conditional2[1] {
+			if team.Team[x].Element == team.Team[0].LeaderSkill.Conditional2[1] ||
+				team.Team[x].Element2 == team.Team[0].LeaderSkill.Conditional2[1] {
 				
 				if !lead {
-					teamD[x].Damage[0].Value *= team[0].LeaderSkill.ATK
-					teamD[x].Damage[1].Value *= team[0].LeaderSkill.ATK
-					teamD[x].Damage[2].Value *= team[0].LeaderSkill.RCV
+					teamD[x].Damage[0].Value *= team.Team[0].LeaderSkill.ATK
+					teamD[x].Damage[1].Value *= team.Team[0].LeaderSkill.ATK
+					teamD[x].Damage[2].Value *= team.Team[0].LeaderSkill.RCV
 					lead = true
 				}
 			}
 		default:
 			//this'll never get called, but i'll leave it here just in case.
 			if !lead {
-				teamD[x].Damage[0].Value *= team[0].LeaderSkill.ATK
-				teamD[x].Damage[1].Value *= team[0].LeaderSkill.ATK
-				teamD[x].Damage[2].Value *= team[0].LeaderSkill.RCV
+				teamD[x].Damage[0].Value *= team.Team[0].LeaderSkill.ATK
+				teamD[x].Damage[1].Value *= team.Team[0].LeaderSkill.ATK
+				teamD[x].Damage[2].Value *= team.Team[0].LeaderSkill.RCV
 				lead = true
 			}
 		}
 
 		//******************** FRIEND *********************
 
-		switch team[5].LeaderSkill.Conditional[0] {
+		switch team.Team[5].LeaderSkill.Conditional[0] {
 		case "type":
 			//Apply only to conditional[1] types
-			if team[x].Type == team[5].LeaderSkill.Conditional[1] ||
-				team[x].Type2 == team[5].LeaderSkill.Conditional[1] {
+			if team.Team[x].Type == team.Team[5].LeaderSkill.Conditional[1] ||
+				team.Team[x].Type2 == team.Team[5].LeaderSkill.Conditional[1] {
 				if !friend {				
-					teamD[x].Damage[0].Value *= team[0].LeaderSkill.ATK
-					teamD[x].Damage[1].Value *= team[0].LeaderSkill.ATK
-					teamD[x].Damage[2].Value *= team[0].LeaderSkill.RCV
+					teamD[x].Damage[0].Value *= team.Team[0].LeaderSkill.ATK
+					teamD[x].Damage[1].Value *= team.Team[0].LeaderSkill.ATK
+					teamD[x].Damage[2].Value *= team.Team[0].LeaderSkill.RCV
 					friend = true
 				}
 			}
 		case "elem":
 			//Apply only to conditional[1] elements
-			if team[x].Element == team[5].LeaderSkill.Conditional[1] ||
-				team[x].Element2 == team[5].LeaderSkill.Conditional[1] {
+			if team.Team[x].Element == team.Team[5].LeaderSkill.Conditional[1] ||
+				team.Team[x].Element2 == team.Team[5].LeaderSkill.Conditional[1] {
 				
 				if !friend {
-					teamD[x].Damage[0].Value *= team[0].LeaderSkill.ATK
-					teamD[x].Damage[1].Value *= team[0].LeaderSkill.ATK
-					teamD[x].Damage[2].Value *= team[0].LeaderSkill.RCV
+					teamD[x].Damage[0].Value *= team.Team[0].LeaderSkill.ATK
+					teamD[x].Damage[1].Value *= team.Team[0].LeaderSkill.ATK
+					teamD[x].Damage[2].Value *= team.Team[0].LeaderSkill.RCV
 					friend = true
 				}
 			}
 		default:
 			//Apply to errbody
 			if !friend {
-				teamD[x].Damage[0].Value *= team[0].LeaderSkill.ATK
-				teamD[x].Damage[1].Value *= team[0].LeaderSkill.ATK
-				teamD[x].Damage[2].Value *= team[0].LeaderSkill.RCV
+				teamD[x].Damage[0].Value *= team.Team[0].LeaderSkill.ATK
+				teamD[x].Damage[1].Value *= team.Team[0].LeaderSkill.ATK
+				teamD[x].Damage[2].Value *= team.Team[0].LeaderSkill.RCV
 				friend = true
 			}
 		}
 
 		//FRIEND CONDITIONAL 2
 
-		switch team[5].LeaderSkill.Conditional2[0] {
+		switch team.Team[5].LeaderSkill.Conditional2[0] {
 		case "type":
 			//Apply only to conditional[1] types
-			if team[x].Type == team[5].LeaderSkill.Conditional2[1] ||
-				team[x].Type2 == team[5].LeaderSkill.Conditional2[1] {
+			if team.Team[x].Type == team.Team[5].LeaderSkill.Conditional2[1] ||
+				team.Team[x].Type2 == team.Team[5].LeaderSkill.Conditional2[1] {
 				if !friend {				
-					teamD[x].Damage[0].Value *= team[0].LeaderSkill.ATK
-					teamD[x].Damage[1].Value *= team[0].LeaderSkill.ATK
-					teamD[x].Damage[2].Value *= team[0].LeaderSkill.RCV
+					teamD[x].Damage[0].Value *= team.Team[0].LeaderSkill.ATK
+					teamD[x].Damage[1].Value *= team.Team[0].LeaderSkill.ATK
+					teamD[x].Damage[2].Value *= team.Team[0].LeaderSkill.RCV
 					friend = true
 				}
 			}
 		case "elem":
 			//Apply only to conditional[1] elements
-			if team[x].Element == team[5].LeaderSkill.Conditional2[1] ||
-				team[x].Element2 == team[5].LeaderSkill.Conditional2[1] {
+			if team.Team[x].Element == team.Team[5].LeaderSkill.Conditional2[1] ||
+				team.Team[x].Element2 == team.Team[5].LeaderSkill.Conditional2[1] {
 				
 				if !friend {
-					teamD[x].Damage[0].Value *= team[0].LeaderSkill.ATK
-					teamD[x].Damage[1].Value *= team[0].LeaderSkill.ATK
-					teamD[x].Damage[2].Value *= team[0].LeaderSkill.RCV
+					teamD[x].Damage[0].Value *= team.Team[0].LeaderSkill.ATK
+					teamD[x].Damage[1].Value *= team.Team[0].LeaderSkill.ATK
+					teamD[x].Damage[2].Value *= team.Team[0].LeaderSkill.RCV
 					friend = true
 				}
 			}
 		default:
 			//Apply to errbody
 			if !friend {
-				teamD[x].Damage[0].Value *= team[0].LeaderSkill.ATK
-				teamD[x].Damage[1].Value *= team[0].LeaderSkill.ATK
-				teamD[x].Damage[2].Value *= team[0].LeaderSkill.RCV
+				teamD[x].Damage[0].Value *= team.Team[0].LeaderSkill.ATK
+				teamD[x].Damage[1].Value *= team.Team[0].LeaderSkill.ATK
+				teamD[x].Damage[2].Value *= team.Team[0].LeaderSkill.RCV
 				friend = true
 			}
 		}
 	}
 
+
+	//Row Multipliers
+	//( 1 + ( 0.1 * n * r)) n = # rows, r = num awakenings
+	for x, _ := range teamD {
+		//for each in teamD, figure out how much the row multiplier affects., #rows = msg.Rows[element]
+		//msg.Rows[teamD[x].Damage[0].Element] for main att // 1 for sub att
+		teamD[x].Damage[0].Value *= (1 + (0.1 * float64(msg.Rows[teamD[x].Damage[0].Element]) * float64(team.Rows[teamD[x].Damage[0].Element])))
+		teamD[x].Damage[1].Value *= (1 + (0.1 * float64(msg.Rows[teamD[x].Damage[1].Element]) * float64(team.Rows[teamD[x].Damage[0].Element])))
+	} //test
+
+	//Enhance orbs multiplier
+	//(1 + ( 0.06 * n )) n = # enhanced orbs
+	for x, _ := range teamD {
+		teamD[x].Damage[0].Value *= (1 + (0.06 * float64(msg.Enhance[teamD[x].Damage[0].Element])))
+		teamD[x].Damage[1].Value *= (1 + (0.06 * float64(msg.Enhance[teamD[x].Damage[1].Element])))
+	}
+
+
+	//Active skill multiplier. (Strict multiplier.. if no active skill, put [ "type/elem", 1, 1 ]
+	for x, _ := range teamD {
+		switch msg.Active[0].(string) {
+		case "type":
+			if team.Team[x].Type == msg.Active[1].(int) || team.Team[x].Type2 == msg.Active[1].(int) {
+				teamD[x].Damage[0].Value *= float64(msg.Active[2].(int))
+				teamD[x].Damage[1].Value *= float64(msg.Active[2].(int))
+			}
+		case "elem":
+			if teamD[x].Damage[0].Element == msg.Active[1].(int){
+				teamD[x].Damage[0].Value *= float64(msg.Active[2].(int))
+			}
+			if teamD[x].Damage[1].Element == msg.Active[1].(int){
+				teamD[x].Damage[1].Value *= float64(msg.Active[2].(int))
+			}
+		}
+	}
+	
 	res = teamD
 	return
 }

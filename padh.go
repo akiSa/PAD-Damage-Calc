@@ -7,6 +7,11 @@ import (
 	"math"
 )
 
+type teamL struct {
+	Team []lookup `json:"team"`
+	Rows [6]int `json:"row_enhances"`
+	Enhance [6]int `json:"orb_enhances"`
+}
 type lookup struct {
 	//note, put images in here too
 	Name string
@@ -34,13 +39,14 @@ type lookup struct {
 	} `json:"stats"`
 }
 
-func TeamLookup (ID int) (res []lookup) {
+//func TeamLookup (ID int) (res []lookup) {
+func TeamLookup (ID int) (res teamL) {
 	var teamj PADHTeam
 	team := PADHGet("team", ID)
 	err := json.Unmarshal(team, &teamj)
 	if err != nil { panic(err) }
 	
-	res = append(res, Lookup(teamj.Leader))
+	res.Team = append(res.Team, Lookup(teamj.Leader))
 	//res = append(res, Lookup(teamj.Sub1))
 	// for x := 1; x < 5; x++ {
 	// 	fmt.Println(teamj[fmt.Sprintf("sub%d", x)])
@@ -52,7 +58,7 @@ func TeamLookup (ID int) (res []lookup) {
 		for i:= 0; i < s.NumField(); i++ {
 			if st.Field(i).Name == fmt.Sprintf("Sub%d", x) {
 				//res = append(re
-				res = append(res, Lookup(s.Field(i).Interface().(int)))
+				res.Team = append(res.Team, Lookup(s.Field(i).Interface().(int)))
 				//fmt.Println(s.Field(i).Interface())
 			}
 		}		
@@ -97,7 +103,24 @@ func TeamLookup (ID int) (res []lookup) {
 		float64( MonMap[friend.ID].RCVMax - MonMap[friend.ID].RCVMin ) *
 		( math.Pow(float64(friend.Stats.Level - 1 ) / float64(MonMap[friend.ID].MaxLevel - 1), MonMap[friend.ID].HPScale  ) )) + (teamj.FRCV * plusRCV)
 
-	res = append(res, friend)
+	res.Team = append(res.Team, friend)
+
+	for _, y := range res.Team {
+		for _, awk := range y.Awakenings {
+			switch awk {
+			case fireRow:
+				res.Rows[0] ++
+			case waterRow:
+				res.Rows[1] ++
+			case woodRow:
+				res.Rows[2] ++
+			case lightRow:
+				res.Rows[3] ++
+			case darkRow:
+				res.Rows[4] ++
+			}
+		}
+	}
 	return
 }
 

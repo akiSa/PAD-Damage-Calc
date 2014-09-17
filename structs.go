@@ -7,8 +7,11 @@ type orbs struct {
 	Dark []float64 `json:"dark"`
 	Light []float64 `json:"light"`
 	Heart []float64 `json:"heart"`
+	Rows []float64 `json:"rows"` //# of rows per colour [ x x x x x x ]
+	Enhance []float64 `json:"enhanced_orbs"` //# of enhanced orbs per colour [ x x x x x x ]
+	Active []interface{} `json:"active_ability"` //[ "type", 2, 3] //Type 2, 3x
 }
-
+//Damage = [ main att, sub att, heal ]
 type teamDamage struct {
 	Damage [3]struct{
 		Element int `json:"element"`
