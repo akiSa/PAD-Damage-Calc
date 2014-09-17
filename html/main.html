@@ -38,6 +38,8 @@
         #Enhanced orbs: <input ng-model="orbs.enhanced_orbs" ng-list required/>
         #Rows: <input ng-model="orbs.row" ng-list required/>
         <br>
+        
+
       </form>
     </div>
     <script>
@@ -85,7 +87,6 @@
         //console.log ($scope.teamID)
         sock.onopen = function () { }
         sock.onmessage = function (message) {
-          console.log(message.data)
           var m = JSON.parse(message.data);
 
           if (m.initial) {
@@ -105,7 +106,9 @@
                 }
               });
           } else {
-            
+            $scope.$apply(function() {
+                
+              });
           }
         }
       };
