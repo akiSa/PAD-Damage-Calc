@@ -91,6 +91,7 @@ func teamHandler(res http.ResponseWriter, req *http.Request) {
 	//log.Println(teamID)
 	
 	ws, _ := websocket.Upgrade(res, req, nil, 1024, 1024)
+	defer ws.Close()
 	log.Printf("got websocket conn from %v\n", ws.RemoteAddr())
 
 	team := TeamLookup(teamID)

@@ -28,21 +28,29 @@
         <br>
       </form>
       <form ng-submit="combos()">
-        <input ng-model="orbs.fire" ng-list required />
-        <input ng-model="orbs.water" ng-list required/>
-        <input ng-model="orbs.wood" ng-list required/>
-        <input ng-model="orbs.light" ng-list required/>
-        <input ng-model="orbs.dark" ng-list required/>
-        <input ng-model="orbs.heart" ng-list required/>
+        Fire: <input ng-model="orbs.fire" ng-list required />
+        Water: <input ng-model="orbs.water" ng-list required/>
+        Wood: <input ng-model="orbs.wood" ng-list required/>
+        Light: <input ng-model="orbs.light" ng-list required/>
+        Dark: <input ng-model="orbs.dark" ng-list required/>
+        Heart: <input ng-model="orbs.heart" ng-list required/>
         <br>
-        <input ng-model="orbs.enhanced_orbs" ng-list required/>
-        <input ng-model="orbs.row" ng-list required/>
+        #Enhanced orbs: <input ng-model="orbs.enhanced_orbs" ng-list required/>
+        #Rows: <input ng-model="orbs.row" ng-list required/>
         <br>
-        
       </form>
     </div>
     <script>
     function mycontroller($scope) {
+      var sock
+
+      window.onbeforeunload = function closingCode() {
+        //Close websocket
+        console.log("byebye")
+        sock.close()
+        return null;
+      }
+
       $scope.teamID = "77475";
       $scope.orbs = {
         fire: [],
@@ -53,7 +61,7 @@
         heart: [],
         enhanced_orbs: [0,0,0,0,0],
         row: [0,0,0,0,0]
-      }
+      };
       $scope.image = [ "", "", "", "", "", "" ];
       $scope.stats = {
         hp: [],
@@ -63,38 +71,43 @@
       $scope.meta = {
         enhance: [],
         rows: []
-      }
+      };
       
       $scope.combos = function() {
         console.log(JSON.stringify($scope.orbs))
-      }
+      };
       
       $scope.submit = function() {
+        //Need to find a way to pass back data initially, maybe GET request then use websockets on the combos() function?
+        //or just tag the data like a cruff.
+        
         sock = new WebSocket("ws://54.88.52.106:8080/team/" + $scope.teamID + "/");
         //console.log ($scope.teamID)
         sock.onopen = function () { }
         sock.onmessage = function (message) {
           //console.log(message.data)
           var m = JSON.parse(message.data);
-          m.team.forEach(function(entry) {
-              console.log(entry);
-            });
-          
-          $scope.$apply(function() {
-              for (var i = 0; i < $scope.image.length; i++) {
-                $scope.image[i] = "http://padherder.com/"+m.team[i].image60_href
-                $scope.stats.hp[i] = m.team[i].stats.hp
-                $scope.stats.atk[i] = m.team[i].stats.atk
-                $scope.stats.rcv[i] = m.team[i].stats.rcv
-                $scope.meta.enhance = m.orb_enhances
-                $scope.meta.rows = m.row_enhances
-              }
-            });
-
+          if m.initial {
+            //Initial message
+            m.team.forEach(function(entry) {
+                console.log(entry);
+              });
+            
+            $scope.$apply(function() {
+                for (var i = 0; i < $scope.image.length; i++) {
+                  $scope.image[i] = "http://padherder.com/"+m.team[i].image60_href
+                  $scope.stats.hp[i] = m.team[i].stats.hp
+                  $scope.stats.atk[i] = m.team[i].stats.atk
+                  $scope.stats.rcv[i] = m.team[i].stats.rcv
+                  $scope.meta.enhance = m.orb_enhances
+                  $scope.meta.rows = m.row_enhances
+                }
+              });
+          } else {
+            
+          }
         }
-      }
-
-
+      };
     }
     </script>
   </body>

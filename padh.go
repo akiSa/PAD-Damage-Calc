@@ -92,6 +92,8 @@ func TeamLookup (ID int) (res teamL) {
 			}
 		}
 	}
+
+	res.Initial = true
 	return
 }
 
