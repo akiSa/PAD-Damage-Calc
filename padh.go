@@ -7,37 +7,7 @@ import (
 	"math"
 )
 
-type teamL struct {
-	Team []lookup `json:"team"`
-	Rows [6]int `json:"row_enhances"`
-	Enhance [6]int `json:"orb_enhances"`
-}
-type lookup struct {
-	//note, put images in here too
-	Name string
-	ID int `json:"id"`
-	Element int `json:"element"`
-	Element2 int `json:"element2"`
-	Type int `json:"type"`
-	Type2 int `json:"type2"`
-	CurrAwaken int `json:"current_awakening"`
-	Awakenings []int `json:"awakenings"`
-	LeaderSkill struct {
-		Name string `json:"name"`
-		HP float64 `json:"hp"`
-		ATK float64 `json:"atk"`
-		RCV float64 `json:"rcv"`
-		Conditional [2]interface{} `json:"condition"`  //annoying -_-, no condition if this is empty
-		Conditional2 [2]interface{} `json:"condition2"`
-	} `json:"leader_skill"`
-	
-	Stats struct {
-		Level int `json:"level"`
-		HP int `json:"hp"`
-		ATK int `json:"atk"`
-		RCV int `json:"rcv"`
-	} `json:"stats"`
-}
+
 
 //func TeamLookup (ID int) (res []lookup) {
 func TeamLookup (ID int) (res teamL) {
@@ -138,7 +108,7 @@ func Lookup (ID int) (res lookup) {
 	res.ID = monj.Monster
 	//fmt.Println(u_PPJson(MonMap[res.ID], "", " "))
 	res.Name = MonMap[res.ID].Name
-	
+	res.Image60Href = MonMap[res.ID].Image60Href
 	//fmt.Println(LdrMap[ MonMap[MonID].LeaderSkill])
 	res.CurrAwaken = monj.CurrAwaken
 	

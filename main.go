@@ -124,32 +124,32 @@ func teamHandler(res http.ResponseWriter, req *http.Request) {
 
 func main () {
 	//I wanna test some shit
-	team := TeamLookup(77475)
-	//var dmg [6]float64
-	msg := new (orbs)
+	// team := TeamLookup(77475)
+	// //var dmg [6]float64
+	// msg := new (orbs)
 	
-	dmg := make([]float64, 6, 6)
-	teamD := make ([]teamDamage, 6, 6)
+	// dmg := make([]float64, 6, 6)
+	// teamD := make ([]teamDamage, 6, 6)
 
-	msg.Light = []float64{ 3, 3 }
-	msg.Fire = []float64{3}
-	msg.Water = []float64{3}
-	msg.Heart = []float64{3}
-	msg.Rows = []float64{0,0,0,0,1}
-	msg.Enhance = []float64{0,0,0,0,0}
-	//msg.Active = []interface{ string{"type"}, int{2}, int{3} }
-	msg.Active = make([]interface{},3,3)
-	msg.Active[0] = "type"
-	msg.Active[1] = 7 //devil
-	msg.Active[2] = 3 //3x
+	// msg.Light = []float64{ 3, 3 }
+	// msg.Fire = []float64{3}
+	// msg.Water = []float64{3}
+	// msg.Heart = []float64{3}
+	// msg.Rows = []float64{0,0,0,0,1}
+	// msg.Enhance = []float64{0,0,0,0,0}
+	// //msg.Active = []interface{ string{"type"}, int{2}, int{3} }
+	// msg.Active = make([]interface{},3,3)
+	// msg.Active[0] = "type"
+	// msg.Active[1] = 7 //devil
+	// msg.Active[2] = 3 //3x
 
-	teamD = damageResolve(team, teamD, dmg, msg)
+	// teamD = damageResolve(team, teamD, dmg, msg)
 
-	log.Println(u_PPJson(teamD, "", " "))
+	// log.Println(u_PPJson(teamD, "", " "))
 	log.Printf("Starting server")
 	r := mux.NewRouter()
 	r.HandleFunc("/team/{id:[0-9]+/}", teamHandler)
-	//r.PathPrefix("/").Handler(http.FileServer(http.Dir("./html/")))
+	r.PathPrefix("/").Handler(http.FileServer(http.Dir("./html/")))
 	http.ListenAndServe(":8080", r)
 
 

@@ -19,6 +19,42 @@ type teamDamage struct {
 	} `json:"damage"`
 
 }
+
+
+type teamL struct {
+	Team []lookup `json:"team"`
+	Rows [6]int `json:"row_enhances"`
+	Enhance [6]int `json:"orb_enhances"`
+}
+type lookup struct {
+	//note, put images in here too
+	Name string
+	ID int `json:"id"`
+	Image60Href string `json:"image60_href"`
+	Element int `json:"element"`
+	Element2 int `json:"element2"`
+	Type int `json:"type"`
+	Type2 int `json:"type2"`
+	CurrAwaken int `json:"current_awakening"`
+	Awakenings []int `json:"awakenings"`
+	LeaderSkill struct {
+		Name string `json:"name"`
+		HP float64 `json:"hp"`
+		ATK float64 `json:"atk"`
+		RCV float64 `json:"rcv"`
+		Conditional [2]interface{} `json:"condition"`  //annoying -_-, no condition if this is empty
+		Conditional2 [2]interface{} `json:"condition2"`
+	} `json:"leader_skill"`
+	
+	Stats struct {
+		Level int `json:"level"`
+		HP int `json:"hp"`
+		ATK int `json:"atk"`
+		RCV int `json:"rcv"`
+	} `json:"stats"`
+}
+
+
 type PADHMonster struct {
 	ID int `json:"id"`
 	Url string `json:"url"`

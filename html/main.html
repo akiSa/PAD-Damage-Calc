@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>lolwut</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular.min.js"></script>
+  </head>
+  <body>
+    <div ng-app="" ng-controller="mycontroller">
+      <form ng-submit="submit()">
+        <input type="text" ng-model="teamID" />
+      </form>
+    </div>
+    <script>
+    function mycontroller($scope) {
+      $scope.teamID = "77475";
+      $scope.submit = function() {
+        sock = new WebSocket("ws://localhost:8080/team/" + $scope.teamID + "/");
+        //console.log ($scope.teamID)
+        sock.onopen = function () { }
+        sock.onmessage = function (message) {
+          console.log(message.data)
+          var m = JSON.parse(message.data);
+          m.team.forEach(function(entry) {
+              console.log(entry);
+            });
+          //console.log(message.data)
+          //console.log(JSON.stringify(m))
+        }
+      }
+    }
+    </script>
+  </body>
+</html>
