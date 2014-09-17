@@ -8,21 +8,32 @@
     <div ng-app="" ng-controller="mycontroller">
       <form ng-submit="submit()">
         <input type="text" ng-model="teamID" />
+        <img ng-src="{{image.path}}" />
       </form>
     </div>
     <script>
     function mycontroller($scope) {
       $scope.teamID = "77475";
+      $scope.image = {
+        path: ""
+      }
+      
       $scope.submit = function() {
-        sock = new WebSocket("ws://localhost:8080/team/" + $scope.teamID + "/");
+        sock = new WebSocket("ws://54.88.52.106:8080/team/" + $scope.teamID + "/");
         //console.log ($scope.teamID)
         sock.onopen = function () { }
         sock.onmessage = function (message) {
-          console.log(message.data)
+          //console.log(message.data)
           var m = JSON.parse(message.data);
           m.team.forEach(function(entry) {
               console.log(entry);
             });
+          
+          $scope.image.path = "http://padherder.com/"+m.team[0].image60_href
+          // var img = new Image();
+          // img.onload = function() {
+          //   $scope.image.path = m
+          // }
           //console.log(message.data)
           //console.log(JSON.stringify(m))
         }
