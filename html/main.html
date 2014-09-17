@@ -85,9 +85,10 @@
         //console.log ($scope.teamID)
         sock.onopen = function () { }
         sock.onmessage = function (message) {
-          //console.log(message.data)
+          console.log(message.data)
           var m = JSON.parse(message.data);
-          if m.initial {
+
+          if (m.initial) {
             //Initial message
             m.team.forEach(function(entry) {
                 console.log(entry);

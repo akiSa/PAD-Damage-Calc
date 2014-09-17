@@ -22,7 +22,7 @@ type teamDamage struct {
 
 
 type teamL struct {
-	Initial bool `json:"team"`
+	Initial bool `json:"initial"`
 	Team []lookup `json:"team"`
 	Rows [6]int `json:"row_enhances"`
 	Enhance [6]int `json:"orb_enhances"`
