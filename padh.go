@@ -46,6 +46,7 @@ func TeamLookup (ID int) (res teamL) {
 	
 	friend.Stats.Level = teamj.FLevel
 	friend.ID = MonMap[friend.ID].ID
+	friend.Image60Href = MonMap[friend.ID].Image60Href
 	friend.Awakenings = MonMap[friend.ID].Awakenings
 	friend.Element = MonMap[friend.ID].Element
 	friend.Element2 = MonMap[friend.ID].Element2

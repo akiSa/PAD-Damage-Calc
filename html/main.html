@@ -8,15 +8,18 @@
     <div ng-app="" ng-controller="mycontroller">
       <form ng-submit="submit()">
         <input type="text" ng-model="teamID" />
-        <img ng-src="{{image.path}}" />
+        <img ng-src="{{image[0]}}" />
+        <img ng-src="{{image[1]}}" />
+        <img ng-src="{{image[2]}}" />
+        <img ng-src="{{image[3]}}" />
+        <img ng-src="{{image[4]}}" />
+        <img ng-src="{{image[5]}}" />
       </form>
     </div>
     <script>
     function mycontroller($scope) {
       $scope.teamID = "77475";
-      $scope.image = {
-        path: ""
-      }
+      $scope.image = [ "", "", "", "", "", "" ];
       
       $scope.submit = function() {
         sock = new WebSocket("ws://54.88.52.106:8080/team/" + $scope.teamID + "/");
@@ -30,14 +33,11 @@
             });
           
           $scope.$apply(function() {
-              $scope.image.path = "http://padherder.com/"+m.team[0].image60_href
+              for (var i = 0; i < $scope.image.length; i++) {
+                $scope.image[i] = "http://padherder.com/"+m.team[i].image60_href
+              }
             });
-          // var img = new Image();
-          // img.onload = function() {
-          //   $scope.image.path = m
-          // }
-          //console.log(message.data)
-          //console.log(JSON.stringify(m))
+
         }
       }
     }
