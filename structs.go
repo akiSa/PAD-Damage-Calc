@@ -42,8 +42,8 @@ type lookup struct {
 		HP float64 `json:"hp"`
 		ATK float64 `json:"atk"`
 		RCV float64 `json:"rcv"`
-		Conditional [2]interface{} `json:"condition"`  //annoying -_-, no condition if this is empty
-		Conditional2 [2]interface{} `json:"condition2"`
+		Conditional []interface{} `json:"condition"`  //annoying -_-, no condition if this is empty
+		Conditional2 []interface{} `json:"condition2"`
 	} `json:"leader_skill"`
 	
 	Stats struct {

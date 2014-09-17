@@ -59,7 +59,7 @@ func TeamLookup (ID int) (res teamL) {
 		friend.LeaderSkill.RCV = LdrMap[MonMap[friend.ID].LeaderSkill].Data[2].(float64)
 	}
 	if len(LdrMap[MonMap[friend.ID].LeaderSkill].Data) >= 4 {
-		friend.LeaderSkill.Conditional = LdrMap[MonMap[friend.ID].LeaderSkill].Data[3].([2]interface{})
+		friend.LeaderSkill.Conditional = LdrMap[MonMap[friend.ID].LeaderSkill].Data[3].([]interface{})
 	}
 
 	friend.Stats.HP = int(float64(MonMap[friend.ID].HPMin) +
@@ -126,9 +126,9 @@ func Lookup (ID int) (res lookup) {
 		res.LeaderSkill.RCV = LdrMap[MonMap[res.ID].LeaderSkill].Data[2].(float64)
 	}
 	if len(LdrMap[MonMap[res.ID].LeaderSkill].Data) >= 4 {
-		res.LeaderSkill.Conditional = LdrMap[MonMap[res.ID].LeaderSkill].Data[3].([2]interface{})
+		res.LeaderSkill.Conditional = LdrMap[MonMap[res.ID].LeaderSkill].Data[3].([]interface{})
 		if len(LdrMap[MonMap[res.ID].LeaderSkill].Data) >= 5 {
-			res.LeaderSkill.Conditional2 = LdrMap[MonMap[res.ID].LeaderSkill].Data[4].([2]interface{})
+			res.LeaderSkill.Conditional2 = LdrMap[MonMap[res.ID].LeaderSkill].Data[4].([]interface{})
 		}
 	}
 

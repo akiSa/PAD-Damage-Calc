@@ -8,18 +8,66 @@
     <div ng-app="" ng-controller="mycontroller">
       <form ng-submit="submit()">
         <input type="text" ng-model="teamID" />
+        <br>
         <img ng-src="{{image[0]}}" />
         <img ng-src="{{image[1]}}" />
         <img ng-src="{{image[2]}}" />
         <img ng-src="{{image[3]}}" />
         <img ng-src="{{image[4]}}" />
         <img ng-src="{{image[5]}}" />
+        <br>
+        HP: {{stats.hp[0]}} {{stats.hp[1]}} {{stats.hp[2]}} {{stats.hp[3]}} {{stats.hp[4]}} {{stats.hp[5]}}
+        <br>
+        ATK: {{stats.atk[0]}} {{stats.atk[1]}} {{stats.atk[2]}} {{stats.atk[3]}} {{stats.atk[4]}} {{stats.atk[5]}}
+        <br>
+        RCV: {{stats.rcv[0]}} {{stats.rcv[1]}} {{stats.rcv[2]}} {{stats.rcv[3]}} {{stats.rcv[4]}} {{stats.rcv[5]}}
+        <br>
+        Enhanced Orbs: {{meta.enhance}}
+        <br>
+        Rows: {{meta.rows}}
+        <br>
+      </form>
+      <form ng-submit="combos()">
+        <input ng-model="orbs.fire" ng-list required />
+        <input ng-model="orbs.water" ng-list required/>
+        <input ng-model="orbs.wood" ng-list required/>
+        <input ng-model="orbs.light" ng-list required/>
+        <input ng-model="orbs.dark" ng-list required/>
+        <input ng-model="orbs.heart" ng-list required/>
+        <br>
+        <input ng-model="orbs.enhanced_orbs" ng-list required/>
+        <input ng-model="orbs.row" ng-list required/>
+        <br>
+        
       </form>
     </div>
     <script>
     function mycontroller($scope) {
       $scope.teamID = "77475";
+      $scope.orbs = {
+        fire: [],
+        water: [],
+        wood: [],
+        light: [],
+        dark: [],
+        heart: [],
+        enhanced_orbs: [0,0,0,0,0],
+        row: [0,0,0,0,0]
+      }
       $scope.image = [ "", "", "", "", "", "" ];
+      $scope.stats = {
+        hp: [],
+        atk: [],
+        rcv: []
+      };
+      $scope.meta = {
+        enhance: [],
+        rows: []
+      }
+      
+      $scope.combos = function() {
+        console.log(JSON.stringify($scope.orbs))
+      }
       
       $scope.submit = function() {
         sock = new WebSocket("ws://54.88.52.106:8080/team/" + $scope.teamID + "/");
@@ -35,11 +83,18 @@
           $scope.$apply(function() {
               for (var i = 0; i < $scope.image.length; i++) {
                 $scope.image[i] = "http://padherder.com/"+m.team[i].image60_href
+                $scope.stats.hp[i] = m.team[i].stats.hp
+                $scope.stats.atk[i] = m.team[i].stats.atk
+                $scope.stats.rcv[i] = m.team[i].stats.rcv
+                $scope.meta.enhance = m.orb_enhances
+                $scope.meta.rows = m.row_enhances
               }
             });
 
         }
       }
+
+
     }
     </script>
   </body>
