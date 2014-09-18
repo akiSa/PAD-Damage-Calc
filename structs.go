@@ -15,7 +15,7 @@ type orbs struct {
 		HP float64 `json:"hp"`
 		ATK float64 `json:"atk"`
 		RCV float64 `json:"rcv"`
-	} `json:"friend_leader_skill"`
+	} `json:"leader_skill"`
 	FLeaderSkill struct {
 		Condition []interface{} `json:"condition"` //[ "type/elem/all", 1 ]
 		HP float64 `json:"hp"`
