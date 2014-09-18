@@ -3,8 +3,8 @@ package main
 //Elements: fire water wood dark light?
 //Stats: HP Attack RCV
 type Monster struct {
-	Element int `json:"element"`
-	Element2 int `json:"element2"`
+	Element *int `json:"element"`
+	Element2 *int `json:"element2"`
 	Image60Size int `json:"image60_size"`
 	Name string `json:"name"`
 	MaxLevel int `json:"max_level"`

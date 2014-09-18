@@ -149,7 +149,8 @@
       };
       
       $scope.submit = function() {
-        sock = new WebSocket("ws://54.88.52.106:8080/team/" + $scope.teamID + "/");
+        //54.88.52.106 note, change this val to ip of server
+        sock = new WebSocket("ws://localhost:8080/team/" + $scope.teamID + "/");
         //console.log ($scope.teamID)
         sock.onopen = function () { }
         sock.onmessage = function (message) {

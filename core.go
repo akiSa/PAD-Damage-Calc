@@ -55,20 +55,28 @@ func damageResolve (team teamL/*[]lookup*/, teamD []teamDamage, dmg []float64, m
 		//Main attribute
 		//lead,friend = false, false
 		teamD[x].Damage[0].Element = team.Team[x].Element
-		teamD[x].Damage[0].Value = dmg[team.Team[x].Element] * float64(team.Team[x].Stats.ATK) * comboMulti
+		if team.Team[x].Element != nil {
+			teamD[x].Damage[0].Value = dmg[*team.Team[x].Element] * float64(team.Team[x].Stats.ATK) * comboMulti
+		}
 		//Sub attribute
-		teamD[x].Damage[1].Element = team.Team[x].Element2
+		if team.Team[x].Element2 != nil{
+			teamD[x].Damage[1].Element = team.Team[x].Element2
+		} else {
+			teamD[x].Damage[1].Element = nil
+		}
 		if team.Team[x].Element == team.Team[x].Element2 { subMulti = 0.10 } else { subMulti = 0.30 }
-		teamD[x].Damage[1].Value = dmg[team.Team[x].Element2] * (float64(team.Team[x].Stats.ATK)*subMulti) * comboMulti
+		if team.Team[x].Element2 != nil{
+			teamD[x].Damage[1].Value = dmg[*team.Team[x].Element2] * (float64(team.Team[x].Stats.ATK)*subMulti) * comboMulti
+		}
 		//Heal
-		teamD[x].Damage[2].Element = 6
+		temp := 6
+		teamD[x].Damage[2].Element = &temp
 		teamD[x].Damage[2].Value = dmg[5] * float64(team.Team[x].Stats.RCV) * comboMulti
 		//teamD
 		//team[x]
 		
 		//Leader Skill
 		//Re-implementing leaderskill
-		fmt.Println(msg)
 		switch msg.LeaderSkill.Condition[0].(string) {
 		case "type":
 			if msg.LeaderSkill.Condition[1].(int) == team.Team[x].Type || msg.LeaderSkill.Condition[1].(int) == team.Team[x].Type2 {
@@ -76,12 +84,17 @@ func damageResolve (team teamL/*[]lookup*/, teamD []teamDamage, dmg []float64, m
 				teamD[x].Damage[1].Value *= msg.LeaderSkill.ATK
 				teamD[x].Damage[2].Value *= msg.LeaderSkill.RCV
 			}
+			
 		case "elem":
-			if msg.LeaderSkill.Condition[1].(int) == teamD[x].Damage[0].Element {
-				teamD[x].Damage[0].Value *= msg.LeaderSkill.ATK
+			if teamD[x].Damage[0].Element != nil{
+				if msg.LeaderSkill.Condition[1].(int) == *teamD[x].Damage[0].Element {
+					teamD[x].Damage[0].Value *= msg.LeaderSkill.ATK
+				}
 			}
-			if msg.LeaderSkill.Condition[1].(int) == teamD[x].Damage[1].Element {
-				teamD[x].Damage[1].Value *= msg.LeaderSkill.ATK
+			if teamD[x].Damage[1].Element != nil{
+				if msg.LeaderSkill.Condition[1].(int) == *teamD[x].Damage[1].Element {
+					teamD[x].Damage[1].Value *= msg.LeaderSkill.ATK
+				}
 			}
 		case "all", "default":
 			teamD[x].Damage[0].Value *= msg.LeaderSkill.ATK
@@ -98,11 +111,15 @@ func damageResolve (team teamL/*[]lookup*/, teamD []teamDamage, dmg []float64, m
 				teamD[x].Damage[2].Value *= msg.FLeaderSkill.RCV
 			}
 		case "elem":
-			if msg.FLeaderSkill.Condition[1].(int) == teamD[x].Damage[0].Element {
-				teamD[x].Damage[0].Value *= msg.FLeaderSkill.ATK
+			if teamD[x].Damage[0].Element != nil{
+				if msg.FLeaderSkill.Condition[1].(int) == *teamD[x].Damage[0].Element {
+					teamD[x].Damage[0].Value *= msg.FLeaderSkill.ATK
+				}
 			}
-			if msg.FLeaderSkill.Condition[1].(int) == teamD[x].Damage[1].Element {
-				teamD[x].Damage[1].Value *= msg.FLeaderSkill.ATK
+			if teamD[x].Damage[1].Element != nil{
+				if msg.FLeaderSkill.Condition[1].(int) == *teamD[x].Damage[1].Element {
+					teamD[x].Damage[1].Value *= msg.FLeaderSkill.ATK
+				}
 			}
 		case "all", "default":
 			teamD[x].Damage[0].Value *= msg.FLeaderSkill.ATK
@@ -118,15 +135,22 @@ func damageResolve (team teamL/*[]lookup*/, teamD []teamDamage, dmg []float64, m
 	for x, _ := range teamD {
 		//for each in teamD, figure out how much the row multiplier affects., #rows = msg.Rows[element]
 		//msg.Rows[teamD[x].Damage[0].Element] for main att // 1 for sub att
-		teamD[x].Damage[0].Value *= (1 + (0.1 * float64(msg.Rows[teamD[x].Damage[0].Element]) * float64(team.Rows[teamD[x].Damage[0].Element])))
-		teamD[x].Damage[1].Value *= (1 + (0.1 * float64(msg.Rows[teamD[x].Damage[1].Element]) * float64(team.Rows[teamD[x].Damage[0].Element])))
+		if teamD[x].Damage[0].Element != nil{
+			teamD[x].Damage[0].Value *= (1 + (0.1 * float64(msg.Rows[*teamD[x].Damage[0].Element]) * float64(team.Rows[*teamD[x].Damage[0].Element])))}
+		if teamD[x].Damage[1].Element != nil{
+			teamD[x].Damage[1].Value *= (1 + (0.1 * float64(msg.Rows[*teamD[x].Damage[1].Element]) * float64(team.Rows[*teamD[x].Damage[0].Element])))
+		}
 	} //test
 
 	//Enhance orbs multiplier
 	//(1 + ( 0.06 * n )) n = # enhanced orbs
 	for x, _ := range teamD {
-		teamD[x].Damage[0].Value *= (1 + (0.06 * float64(msg.Enhance[teamD[x].Damage[0].Element])))
-		teamD[x].Damage[1].Value *= (1 + (0.06 * float64(msg.Enhance[teamD[x].Damage[1].Element])))
+		if teamD[x].Damage[0].Element != nil{
+			teamD[x].Damage[0].Value *= (1 + (0.06 * float64(msg.Enhance[*teamD[x].Damage[0].Element])))
+		}
+		if teamD[x].Damage[1].Element != nil{
+			teamD[x].Damage[1].Value *= (1 + (0.06 * float64(msg.Enhance[*teamD[x].Damage[1].Element])))
+		}
 	}
 
 
@@ -139,11 +163,15 @@ func damageResolve (team teamL/*[]lookup*/, teamD []teamDamage, dmg []float64, m
 				teamD[x].Damage[1].Value *= float64(msg.Active[2].(int))
 			}
 		case "elem":
-			if teamD[x].Damage[0].Element == int(msg.Active[1].(float64)){
-				teamD[x].Damage[0].Value *= float64(msg.Active[2].(float64))
+			if teamD[x].Damage[0].Element != nil{
+				if *teamD[x].Damage[0].Element == int(msg.Active[1].(float64)){
+					teamD[x].Damage[0].Value *= float64(msg.Active[2].(float64))
+				}
 			}
-			if teamD[x].Damage[1].Element == int(msg.Active[1].(float64)){
-				teamD[x].Damage[1].Value *= float64(msg.Active[2].(float64))
+			if teamD[x].Damage[1].Element != nil{
+				if *teamD[x].Damage[1].Element == int(msg.Active[1].(float64)){
+					teamD[x].Damage[1].Value *= float64(msg.Active[2].(float64))
+				}
 			}
 		}
 	}
@@ -159,8 +187,12 @@ func damageResolve (team teamL/*[]lookup*/, teamD []teamDamage, dmg []float64, m
 			}
 		}
 		if numawk >= 1 {
-			teamD[x].Damage[0].Value += ( 1 + ( float64(0.5) * float64(numawk) * float64(tpacount[team.Team[x].Element])))
-			teamD[x].Damage[1].Value += ( 1 + ( float64(0.5) * float64(numawk) * float64(tpacount[team.Team[x].Element2])))
+			if team.Team[x].Element != nil{
+				teamD[x].Damage[0].Value += ( 1 + ( float64(0.5) * float64(numawk) * float64(tpacount[*team.Team[x].Element])))
+			}
+			if team.Team[x].Element2 != nil {
+				teamD[x].Damage[1].Value += ( 1 + ( float64(0.5) * float64(numawk) * float64(tpacount[*team.Team[x].Element2])))
+			}
 		}
 	}
 	

@@ -1,5 +1,6 @@
 package main
 
+//9 = no element
 type orbs struct {
 	Fire []float64 `json:"fire"`
 	Water []float64 `json:"water"`
@@ -26,7 +27,7 @@ type orbs struct {
 //Damage = [ main att, sub att, heal ]
 type teamDamage struct {
 	Damage [3]struct{
-		Element int `json:"element"`
+		Element *int `json:"element"`
 		Value float64 `json:"val"`
 	} `json:"damage"`
 
@@ -44,8 +45,8 @@ type lookup struct {
 	Name string
 	ID int `json:"id"`
 	Image60Href string `json:"image60_href"`
-	Element int `json:"element"`
-	Element2 int `json:"element2"`
+	Element *int `json:"element"`
+	Element2 *int `json:"element2"`
 	Type int `json:"type"`
 	Type2 int `json:"type2"`
 	CurrAwaken int `json:"current_awakening"`

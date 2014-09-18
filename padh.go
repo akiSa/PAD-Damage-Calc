@@ -112,6 +112,7 @@ func Lookup (ID int) (res lookup) {
 	//fmt.Println(u_PPJson(MonMap[res.ID], "", " "))
 	res.Name = MonMap[res.ID].Name
 	res.Image60Href = MonMap[res.ID].Image60Href
+	//fmt.Println(MonMap[res.ID].Element2)
 	//fmt.Println(LdrMap[ MonMap[MonID].LeaderSkill])
 	res.CurrAwaken = monj.CurrAwaken
 	
