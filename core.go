@@ -252,6 +252,8 @@ func damageResolve (team teamL/*[]lookup*/, teamD []teamDamage, dmg []float64, m
 
 	//TWO PRONG ATTACk
 	for x, _ := range teamD {
+		fmt.Print("TWO PRONG: ")
+		fmt.Println(tpacount)
 		numawk := 0
 		for _, awk := range team.Team[x].Awakenings {
 			if awk == twoProng {
