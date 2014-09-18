@@ -48,6 +48,16 @@
         Multiplier:
         <input type="number" ng-model="orbs.active_ability[2]"  />
         <br>
+        Leader Skill: <input ng-model="orbs.leader_skill.condition" ng-list required />
+        HP: <input type="number" ng-model="orbs.leader_skill.hp" />
+        ATK: <input type="number" ng-model="orbs.leader_skill.atk" />
+        RCV: <input type="number" ng-model="orbs.leader_skill.rcv" />
+        <br>
+        Friend Leader Skill: <input type="text" ng-model="orbs.friend_leader_skill.condition" ng-list required/>
+        HP: <input type="number" ng-model="orbs.friend_leader_skill.hp" />
+        ATK: <input type="number" ng-model="orbs.friend_leader_skill.atk" />
+        RCV: <input type="number" ng-model="orbs.friend_leader_skill.rcv" />
+        <br>
         Damage: {{damage}}
         
       </form>
@@ -100,7 +110,19 @@
         heart: [],
         enhanced_orbs: [0,0,0,0,0],
         rows: [0,0,0,0,0],
-        active_ability: [ "elem", 1, 1 ]
+        active_ability: [ "elem", 1, 1 ],
+        leader_skill: {
+          condition: ["all", 1 ],
+          hp: 1,
+          atk: 1,
+          rcv: 1
+        },
+        friend_leader_skill: {
+          condition: ["all", 1 ],
+          hp: 1,
+          atk: 1,
+          rcv: 1
+        }
       };
       $scope.image = [ "", "", "", "", "", "" ];
       $scope.stats = {
@@ -148,6 +170,8 @@
                   $scope.meta.enhance = m.orb_enhances
                   $scope.meta.rows = m.row_enhances
                 }
+                $scope.orbs.leader_skill = m.team[0].leader_skill
+                $scope.orbs.friend_leader_skill = m.team[5].leader_skill
               });
           } else {
             $scope.$apply(function() {

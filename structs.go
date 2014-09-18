@@ -10,6 +10,18 @@ type orbs struct {
 	Rows []float64 `json:"rows"` //# of rows per colour [ x x x x x x ]
 	Enhance []float64 `json:"enhanced_orbs"` //# of enhanced orbs per colour [ x x x x x x ]
 	Active []interface{} `json:"active_ability"` //[ "type", 2, 3] //Type 2, 3x
+	LeaderSkill struct {
+		Condition []interface{} `json:"condition"` //[ "type/elem/all", 1 ]
+		HP float64 `json:"hp"`
+		ATK float64 `json:"atk"`
+		RCV float64 `json:"rcv"`
+	} `json:"friend_leader_skill"`
+	FLeaderSkill struct {
+		Condition []interface{} `json:"condition"` //[ "type/elem/all", 1 ]
+		HP float64 `json:"hp"`
+		ATK float64 `json:"atk"`
+		RCV float64 `json:"rcv"`
+	} `json:"friend_leader_skill"`
 }
 //Damage = [ main att, sub att, heal ]
 type teamDamage struct {

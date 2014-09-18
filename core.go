@@ -49,11 +49,11 @@ func damageResolve (team teamL/*[]lookup*/, teamD []teamDamage, dmg []float64, m
 	fmt.Println("Combo Multiplier:", comboMulti)
 	//factor in leaderskill last
 	var subMulti float64
-	var lead, friend bool
+	//var lead, friend bool
 	subMulti = 0
 	for x,_ := range teamD {
 		//Main attribute
-		lead,friend = false, false
+		//lead,friend = false, false
 		teamD[x].Damage[0].Element = team.Team[x].Element
 		teamD[x].Damage[0].Value = dmg[team.Team[x].Element] * float64(team.Team[x].Stats.ATK) * comboMulti
 		//Sub attribute
@@ -67,151 +67,48 @@ func damageResolve (team teamL/*[]lookup*/, teamD []teamDamage, dmg []float64, m
 		//team[x]
 		
 		//Leader Skill
-		if len(team.Team[0].LeaderSkill.Conditional) >= 1 {
-			switch team.Team[0].LeaderSkill.Conditional[0] {
-			case "type":
-				//Apply only to conditional[1] types
-				if team.Team[x].Type == team.Team[0].LeaderSkill.Conditional[1] ||
-					team.Team[x].Type2 == team.Team[0].LeaderSkill.Conditional[1] {
-					if !lead {				
-						teamD[x].Damage[0].Value *= team.Team[0].LeaderSkill.ATK
-						teamD[x].Damage[1].Value *= team.Team[0].LeaderSkill.ATK
-						teamD[x].Damage[2].Value *= team.Team[0].LeaderSkill.RCV
-						lead = true
-					}
-					//I THINK it works like this, need to check, but I remember d/l batman enhancing his own dark attacks too
-				}
-			case "elem":
-				//Apply only to conditional[1] elements
-				if team.Team[x].Element == team.Team[0].LeaderSkill.Conditional[1] ||
-					team.Team[x].Element2 == team.Team[0].LeaderSkill.Conditional[1] {
-					
-					if !lead {
-						teamD[x].Damage[0].Value *= team.Team[0].LeaderSkill.ATK
-						teamD[x].Damage[1].Value *= team.Team[0].LeaderSkill.ATK
-						teamD[x].Damage[2].Value *= team.Team[0].LeaderSkill.RCV
-						lead = true
-					}
-				}
-			default:
-				//Apply to errbody
-				if !lead {
-					teamD[x].Damage[0].Value *= team.Team[0].LeaderSkill.ATK
-					teamD[x].Damage[1].Value *= team.Team[0].LeaderSkill.ATK
-					teamD[x].Damage[2].Value *= team.Team[0].LeaderSkill.RCV
-					lead = true
-				}
+		//Re-implementing leaderskill
+		switch msg.LeaderSkill.Condition[0].(string) {
+		case "type":
+			if msg.LeaderSkill.Condition[1].(int) == team.Team[x].Type || msg.LeaderSkill.Condition[1].(int) == team.Team[x].Type2 {
+				teamD[x].Damage[0].Value *= msg.LeaderSkill.ATK
+				teamD[x].Damage[1].Value *= msg.LeaderSkill.ATK
+				teamD[x].Damage[2].Value *= msg.LeaderSkill.RCV
 			}
+		case "elem":
+			if msg.LeaderSkill.Condition[1].(int) == teamD[x].Damage[0].Element {
+				teamD[x].Damage[0].Value *= msg.LeaderSkill.ATK
+			}
+			if msg.LeaderSkill.Condition[1].(int) == teamD[x].Damage[1].Element {
+				teamD[x].Damage[1].Value *= msg.LeaderSkill.ATK
+			}
+		case "all", "default":
+			teamD[x].Damage[0].Value *= msg.LeaderSkill.ATK
+			teamD[x].Damage[1].Value *= msg.LeaderSkill.ATK
+			teamD[x].Damage[2].Value *= msg.LeaderSkill.RCV			
 		}
-		if len(team.Team[0].LeaderSkill.Conditional2) >= 1 {
-			switch team.Team[0].LeaderSkill.Conditional2[0] {
-			case "type":
-				//Apply only to conditional[1] types
-				if team.Team[x].Type == team.Team[0].LeaderSkill.Conditional2[1] ||
-					team.Team[x].Type2 == team.Team[0].LeaderSkill.Conditional2[1] {
-					if !lead {				
-						teamD[x].Damage[0].Value *= team.Team[0].LeaderSkill.ATK
-						teamD[x].Damage[1].Value *= team.Team[0].LeaderSkill.ATK
-						teamD[x].Damage[2].Value *= team.Team[0].LeaderSkill.RCV
-						lead = true
-					}
-					//I THINK it works like this, need to check, but I remember d/l batman enhancing his own dark attacks too
-				}
-			case "elem":
-				//Apply only to conditional[1] elements
-				if team.Team[x].Element == team.Team[0].LeaderSkill.Conditional2[1] ||
-					team.Team[x].Element2 == team.Team[0].LeaderSkill.Conditional2[1] {
-					
-					if !lead {
-						teamD[x].Damage[0].Value *= team.Team[0].LeaderSkill.ATK
-						teamD[x].Damage[1].Value *= team.Team[0].LeaderSkill.ATK
-						teamD[x].Damage[2].Value *= team.Team[0].LeaderSkill.RCV
-						lead = true
-					}
-				}
-			default:
-				//this'll never get called, but i'll leave it here just in case.
-				if !lead {
-					teamD[x].Damage[0].Value *= team.Team[0].LeaderSkill.ATK
-					teamD[x].Damage[1].Value *= team.Team[0].LeaderSkill.ATK
-					teamD[x].Damage[2].Value *= team.Team[0].LeaderSkill.RCV
-					lead = true
-				}
+
+		//Friend leader skill!
+		switch msg.FLeaderSkill.Condition[0].(string) {
+		case "type":
+			if msg.FLeaderSkill.Condition[1].(int) == team.Team[x].Type || msg.FLeaderSkill.Condition[1].(int) == team.Team[x].Type2 {
+				teamD[x].Damage[0].Value *= msg.FLeaderSkill.ATK
+				teamD[x].Damage[1].Value *= msg.FLeaderSkill.ATK
+				teamD[x].Damage[2].Value *= msg.FLeaderSkill.RCV
 			}
+		case "elem":
+			if msg.FLeaderSkill.Condition[1].(int) == teamD[x].Damage[0].Element {
+				teamD[x].Damage[0].Value *= msg.FLeaderSkill.ATK
+			}
+			if msg.FLeaderSkill.Condition[1].(int) == teamD[x].Damage[1].Element {
+				teamD[x].Damage[1].Value *= msg.FLeaderSkill.ATK
+			}
+		case "all", "default":
+			teamD[x].Damage[0].Value *= msg.FLeaderSkill.ATK
+			teamD[x].Damage[1].Value *= msg.FLeaderSkill.ATK
+			teamD[x].Damage[2].Value *= msg.FLeaderSkill.RCV			
 		}
 		
-		//******************** FRIEND *********************
-		if len(team.Team[5].LeaderSkill.Conditional) >= 1 {
-			switch team.Team[5].LeaderSkill.Conditional[0] {
-			case "type":
-				//Apply only to conditional[1] types
-				if team.Team[x].Type == team.Team[5].LeaderSkill.Conditional[1] ||
-					team.Team[x].Type2 == team.Team[5].LeaderSkill.Conditional[1] {
-					if !friend {				
-						teamD[x].Damage[0].Value *= team.Team[0].LeaderSkill.ATK
-						teamD[x].Damage[1].Value *= team.Team[0].LeaderSkill.ATK
-						teamD[x].Damage[2].Value *= team.Team[0].LeaderSkill.RCV
-						friend = true
-					}
-				}
-			case "elem":
-				//Apply only to conditional[1] elements
-				if team.Team[x].Element == team.Team[5].LeaderSkill.Conditional[1] ||
-					team.Team[x].Element2 == team.Team[5].LeaderSkill.Conditional[1] {
-					
-					if !friend {
-						teamD[x].Damage[0].Value *= team.Team[0].LeaderSkill.ATK
-						teamD[x].Damage[1].Value *= team.Team[0].LeaderSkill.ATK
-						teamD[x].Damage[2].Value *= team.Team[0].LeaderSkill.RCV
-						friend = true
-					}
-				}
-			default:
-				//Apply to errbody
-				if !friend {
-					teamD[x].Damage[0].Value *= team.Team[0].LeaderSkill.ATK
-					teamD[x].Damage[1].Value *= team.Team[0].LeaderSkill.ATK
-					teamD[x].Damage[2].Value *= team.Team[0].LeaderSkill.RCV
-					friend = true
-				}
-			}
-		}
-		//FRIEND CONDITIONAL 2
-		if len(team.Team[5].LeaderSkill.Conditional2) >= 1 {
-			switch team.Team[5].LeaderSkill.Conditional2[0] {
-			case "type":
-				//Apply only to conditional[1] types
-				if team.Team[x].Type == team.Team[5].LeaderSkill.Conditional2[1] ||
-					team.Team[x].Type2 == team.Team[5].LeaderSkill.Conditional2[1] {
-					if !friend {				
-						teamD[x].Damage[0].Value *= team.Team[0].LeaderSkill.ATK
-						teamD[x].Damage[1].Value *= team.Team[0].LeaderSkill.ATK
-						teamD[x].Damage[2].Value *= team.Team[0].LeaderSkill.RCV
-						friend = true
-					}
-				}
-			case "elem":
-				//Apply only to conditional[1] elements
-				if team.Team[x].Element == team.Team[5].LeaderSkill.Conditional2[1] ||
-					team.Team[x].Element2 == team.Team[5].LeaderSkill.Conditional2[1] {
-					
-					if !friend {
-						teamD[x].Damage[0].Value *= team.Team[0].LeaderSkill.ATK
-						teamD[x].Damage[1].Value *= team.Team[0].LeaderSkill.ATK
-						teamD[x].Damage[2].Value *= team.Team[0].LeaderSkill.RCV
-						friend = true
-					}
-				}
-			default:
-				//Apply to errbody
-				if !friend {
-					teamD[x].Damage[0].Value *= team.Team[0].LeaderSkill.ATK
-					teamD[x].Damage[1].Value *= team.Team[0].LeaderSkill.ATK
-					teamD[x].Damage[2].Value *= team.Team[0].LeaderSkill.RCV
-					friend = true
-				}
-			}
-		}
 	}
 
 	fmt.Println(msg)
@@ -251,9 +148,9 @@ func damageResolve (team teamL/*[]lookup*/, teamD []teamDamage, dmg []float64, m
 	}
 
 	//TWO PRONG ATTACk
+	fmt.Print("TWO PRONG: ")
+	fmt.Println(tpacount)
 	for x, _ := range teamD {
-		fmt.Print("TWO PRONG: ")
-		fmt.Println(tpacount)
 		numawk := 0
 		for _, awk := range team.Team[x].Awakenings {
 			if awk == twoProng {
