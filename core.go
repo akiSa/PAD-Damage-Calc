@@ -12,7 +12,7 @@ func damageResolve (team teamL/*[]lookup*/, teamD []teamDamage, dmg []float64, m
 	
 	comboMulti, comboCount=0,0
 
-	tpacount := []int{}
+	tpacount := []int{0,0,0,0,0}
 
 	//two prong, ugh
 	for _,y := range msg.Fire {
