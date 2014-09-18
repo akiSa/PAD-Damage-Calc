@@ -30,7 +30,7 @@ const (
 	woodRow = 24
 	lightRow = 25
 	darkRow = 26
-	
+	twoProng = 27
 )
 var MonMap map[int]*Monster
 var AwkMap map[int]*Awakenings

@@ -11,24 +11,32 @@ func damageResolve (team teamL/*[]lookup*/, teamD []teamDamage, dmg []float64, m
 	var comboCount float64
 	
 	comboMulti, comboCount=0,0
-	
+
+	tpacount := []int{}
+
+	//two prong, ugh
 	for _,y := range msg.Fire {
+		if y == 4 { tpacount[0] ++ }
 		comboCount ++
 		dmg[0] += 1 + (( y - 3)*0.25)
 	}
 	for _,y := range msg.Water {
+		if y == 4 { tpacount[1] ++ }
 		comboCount ++
 		dmg[1] += 1 + (( y - 3)*0.25)
 	}
 	for _,y := range msg.Wood {
+		if y == 4 { tpacount[2] ++ }
 		comboCount ++
 		dmg[2] += 1 + (( y - 3)*0.25)
 	}
 	for _,y := range msg.Light {
+		if y == 4 { tpacount[3] ++ }
 		comboCount ++
 		dmg[3] += 1 + (( y - 3)*0.25)
 	}
 	for _,y := range msg.Dark {
+		if y == 4 { tpacount[4] ++ }
 		comboCount ++
 		dmg[4] += 1 + (( y - 3)*0.25)
 	}
@@ -239,6 +247,20 @@ func damageResolve (team teamL/*[]lookup*/, teamD []teamDamage, dmg []float64, m
 			if teamD[x].Damage[1].Element == int(msg.Active[1].(float64)){
 				teamD[x].Damage[1].Value *= float64(msg.Active[2].(float64))
 			}
+		}
+	}
+
+	//TWO PRONG ATTACk
+	for x, _ := range teamD {
+		numawk := 0
+		for _, awk := range team.Team[x].Awakenings {
+			if awk == twoProng {
+				numawk ++
+			}
+		}
+		if numawk >= 1 {
+			teamD[x].Damage[0].Value += ( 1 + ( float64(0.5) * float64(numawk) * float64(tpacount[team.Team[x].Element])))
+			teamD[x].Damage[1].Value += ( 1 + ( float64(0.5) * float64(numawk) * float64(tpacount[team.Team[x].Element2])))
 		}
 	}
 	

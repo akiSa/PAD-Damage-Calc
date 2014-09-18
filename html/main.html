@@ -127,9 +127,6 @@
       };
       
       $scope.submit = function() {
-        //Need to find a way to pass back data initially, maybe GET request then use websockets on the combos() function?
-        //or just tag the data like a cruff.
-        
         sock = new WebSocket("ws://54.88.52.106:8080/team/" + $scope.teamID + "/");
         //console.log ($scope.teamID)
         sock.onopen = function () { }
