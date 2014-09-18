@@ -138,7 +138,7 @@
       
       $scope.combo = function() {
         for (var $i in $scope.orbs) {
-          if ($i != "active_ability") {
+          if ($i != "active_ability" && $i != "leader_skill" && $i != "friend_leader_skill") {
             $scope.orbs[$i] = $scope.orbs[$i].map(function(x) {
                 return parseInt(x, 10);
               })
@@ -170,20 +170,26 @@
                   $scope.meta.enhance = m.orb_enhances
                   $scope.meta.rows = m.row_enhances
                 }
-                $scope.orbs.leader_skill.condition = m.team[0].leader_skill.condition
+                if (m.team[0].leader_skill.condition != undefined) {
+                  $scope.orbs.leader_skill.condition = m.team[0].leader_skill.condition
+                } else{
+                  $scope.orbs.leader_skill.condition[0] = "all"
+                }
                 $scope.orbs.leader_skill.hp = m.team[0].leader_skill.hp
                 $scope.orbs.leader_skill.atk = m.team[0].leader_skill.atk
                 $scope.orbs.leader_skill.rcv = m.team[0].leader_skill.rcv
-                if $scope.orbs.leader_skill.condition[0] === "" {
-                  $scope.orbs.leader_skill.condition[0] = "all"
+
+                if (m.team[5].leader_skill.condition != null) {
+                  $scope.orbs.friend_leader_skill.condition = m.team[5].leader_skill.condition
+                } else {
+                  $scope.orbs.friend_leader_skill.condition[0] = "all"
                 }
-                $scope.orbs.friend_leader_skill.condition = m.team[5].leader_skill.condition
                 $scope.orbs.friend_leader_skill.hp = m.team[5].leader_skill.hp
                 $scope.orbs.friend_leader_skill.atk = m.team[5].leader_skill.atk
                 $scope.orbs.friend_leader_skill.rcv = m.team[5].leader_skill.rcv
-                if $scope.orbs.friend_leader_skill.condition[0] === "" {
-                  $scope.orbs.friend_leader_skill.condition[0] = "all"
-                }
+                // if $scope.orbs.friend_leader_skill.condition[0] === "" {
+                // 
+                // }
               });
           } else {
             $scope.$apply(function() {

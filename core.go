@@ -68,6 +68,7 @@ func damageResolve (team teamL/*[]lookup*/, teamD []teamDamage, dmg []float64, m
 		
 		//Leader Skill
 		//Re-implementing leaderskill
+		fmt.Println(msg)
 		switch msg.LeaderSkill.Condition[0].(string) {
 		case "type":
 			if msg.LeaderSkill.Condition[1].(int) == team.Team[x].Type || msg.LeaderSkill.Condition[1].(int) == team.Team[x].Type2 {
