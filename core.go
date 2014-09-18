@@ -59,24 +59,34 @@ func damageResolve (team teamL/*[]lookup*/, teamD []teamDamage, dmg []float64, m
 		//team[x]
 		
 		//Leader Skill
-		switch team.Team[0].LeaderSkill.Conditional[0] {
-		case "type":
-			//Apply only to conditional[1] types
-			if team.Team[x].Type == team.Team[0].LeaderSkill.Conditional[1] ||
-				team.Team[x].Type2 == team.Team[0].LeaderSkill.Conditional[1] {
-				if !lead {				
-					teamD[x].Damage[0].Value *= team.Team[0].LeaderSkill.ATK
-					teamD[x].Damage[1].Value *= team.Team[0].LeaderSkill.ATK
-					teamD[x].Damage[2].Value *= team.Team[0].LeaderSkill.RCV
-					lead = true
+		if len(team.Team[0].LeaderSkill.Conditional) >= 1 {
+			switch team.Team[0].LeaderSkill.Conditional[0] {
+			case "type":
+				//Apply only to conditional[1] types
+				if team.Team[x].Type == team.Team[0].LeaderSkill.Conditional[1] ||
+					team.Team[x].Type2 == team.Team[0].LeaderSkill.Conditional[1] {
+					if !lead {				
+						teamD[x].Damage[0].Value *= team.Team[0].LeaderSkill.ATK
+						teamD[x].Damage[1].Value *= team.Team[0].LeaderSkill.ATK
+						teamD[x].Damage[2].Value *= team.Team[0].LeaderSkill.RCV
+						lead = true
+					}
+					//I THINK it works like this, need to check, but I remember d/l batman enhancing his own dark attacks too
 				}
-				//I THINK it works like this, need to check, but I remember d/l batman enhancing his own dark attacks too
-			}
-		case "elem":
-			//Apply only to conditional[1] elements
-			if team.Team[x].Element == team.Team[0].LeaderSkill.Conditional[1] ||
-				team.Team[x].Element2 == team.Team[0].LeaderSkill.Conditional[1] {
-				
+			case "elem":
+				//Apply only to conditional[1] elements
+				if team.Team[x].Element == team.Team[0].LeaderSkill.Conditional[1] ||
+					team.Team[x].Element2 == team.Team[0].LeaderSkill.Conditional[1] {
+					
+					if !lead {
+						teamD[x].Damage[0].Value *= team.Team[0].LeaderSkill.ATK
+						teamD[x].Damage[1].Value *= team.Team[0].LeaderSkill.ATK
+						teamD[x].Damage[2].Value *= team.Team[0].LeaderSkill.RCV
+						lead = true
+					}
+				}
+			default:
+				//Apply to errbody
 				if !lead {
 					teamD[x].Damage[0].Value *= team.Team[0].LeaderSkill.ATK
 					teamD[x].Damage[1].Value *= team.Team[0].LeaderSkill.ATK
@@ -84,34 +94,35 @@ func damageResolve (team teamL/*[]lookup*/, teamD []teamDamage, dmg []float64, m
 					lead = true
 				}
 			}
-		default:
-			//Apply to errbody
-			if !lead {
-				teamD[x].Damage[0].Value *= team.Team[0].LeaderSkill.ATK
-				teamD[x].Damage[1].Value *= team.Team[0].LeaderSkill.ATK
-				teamD[x].Damage[2].Value *= team.Team[0].LeaderSkill.RCV
-				lead = true
-			}
 		}
-
-		switch team.Team[0].LeaderSkill.Conditional2[0] {
-		case "type":
-			//Apply only to conditional[1] types
-			if team.Team[x].Type == team.Team[0].LeaderSkill.Conditional2[1] ||
-				team.Team[x].Type2 == team.Team[0].LeaderSkill.Conditional2[1] {
-				if !lead {				
-					teamD[x].Damage[0].Value *= team.Team[0].LeaderSkill.ATK
-					teamD[x].Damage[1].Value *= team.Team[0].LeaderSkill.ATK
-					teamD[x].Damage[2].Value *= team.Team[0].LeaderSkill.RCV
-					lead = true
+		if len(team.Team[0].LeaderSkill.Conditional2) >= 1 {
+			switch team.Team[0].LeaderSkill.Conditional2[0] {
+			case "type":
+				//Apply only to conditional[1] types
+				if team.Team[x].Type == team.Team[0].LeaderSkill.Conditional2[1] ||
+					team.Team[x].Type2 == team.Team[0].LeaderSkill.Conditional2[1] {
+					if !lead {				
+						teamD[x].Damage[0].Value *= team.Team[0].LeaderSkill.ATK
+						teamD[x].Damage[1].Value *= team.Team[0].LeaderSkill.ATK
+						teamD[x].Damage[2].Value *= team.Team[0].LeaderSkill.RCV
+						lead = true
+					}
+					//I THINK it works like this, need to check, but I remember d/l batman enhancing his own dark attacks too
 				}
-				//I THINK it works like this, need to check, but I remember d/l batman enhancing his own dark attacks too
-			}
-		case "elem":
-			//Apply only to conditional[1] elements
-			if team.Team[x].Element == team.Team[0].LeaderSkill.Conditional2[1] ||
-				team.Team[x].Element2 == team.Team[0].LeaderSkill.Conditional2[1] {
-				
+			case "elem":
+				//Apply only to conditional[1] elements
+				if team.Team[x].Element == team.Team[0].LeaderSkill.Conditional2[1] ||
+					team.Team[x].Element2 == team.Team[0].LeaderSkill.Conditional2[1] {
+					
+					if !lead {
+						teamD[x].Damage[0].Value *= team.Team[0].LeaderSkill.ATK
+						teamD[x].Damage[1].Value *= team.Team[0].LeaderSkill.ATK
+						teamD[x].Damage[2].Value *= team.Team[0].LeaderSkill.RCV
+						lead = true
+					}
+				}
+			default:
+				//this'll never get called, but i'll leave it here just in case.
 				if !lead {
 					teamD[x].Damage[0].Value *= team.Team[0].LeaderSkill.ATK
 					teamD[x].Damage[1].Value *= team.Team[0].LeaderSkill.ATK
@@ -119,85 +130,78 @@ func damageResolve (team teamL/*[]lookup*/, teamD []teamDamage, dmg []float64, m
 					lead = true
 				}
 			}
-		default:
-			//this'll never get called, but i'll leave it here just in case.
-			if !lead {
-				teamD[x].Damage[0].Value *= team.Team[0].LeaderSkill.ATK
-				teamD[x].Damage[1].Value *= team.Team[0].LeaderSkill.ATK
-				teamD[x].Damage[2].Value *= team.Team[0].LeaderSkill.RCV
-				lead = true
-			}
 		}
-
+		
 		//******************** FRIEND *********************
-
-		switch team.Team[5].LeaderSkill.Conditional[0] {
-		case "type":
-			//Apply only to conditional[1] types
-			if team.Team[x].Type == team.Team[5].LeaderSkill.Conditional[1] ||
-				team.Team[x].Type2 == team.Team[5].LeaderSkill.Conditional[1] {
-				if !friend {				
-					teamD[x].Damage[0].Value *= team.Team[0].LeaderSkill.ATK
-					teamD[x].Damage[1].Value *= team.Team[0].LeaderSkill.ATK
-					teamD[x].Damage[2].Value *= team.Team[0].LeaderSkill.RCV
-					friend = true
+		if len(team.Team[5].LeaderSkill.Conditional) >= 1 {
+			switch team.Team[5].LeaderSkill.Conditional[0] {
+			case "type":
+				//Apply only to conditional[1] types
+				if team.Team[x].Type == team.Team[5].LeaderSkill.Conditional[1] ||
+					team.Team[x].Type2 == team.Team[5].LeaderSkill.Conditional[1] {
+					if !friend {				
+						teamD[x].Damage[0].Value *= team.Team[0].LeaderSkill.ATK
+						teamD[x].Damage[1].Value *= team.Team[0].LeaderSkill.ATK
+						teamD[x].Damage[2].Value *= team.Team[0].LeaderSkill.RCV
+						friend = true
+					}
 				}
-			}
-		case "elem":
-			//Apply only to conditional[1] elements
-			if team.Team[x].Element == team.Team[5].LeaderSkill.Conditional[1] ||
-				team.Team[x].Element2 == team.Team[5].LeaderSkill.Conditional[1] {
-				
+			case "elem":
+				//Apply only to conditional[1] elements
+				if team.Team[x].Element == team.Team[5].LeaderSkill.Conditional[1] ||
+					team.Team[x].Element2 == team.Team[5].LeaderSkill.Conditional[1] {
+					
+					if !friend {
+						teamD[x].Damage[0].Value *= team.Team[0].LeaderSkill.ATK
+						teamD[x].Damage[1].Value *= team.Team[0].LeaderSkill.ATK
+						teamD[x].Damage[2].Value *= team.Team[0].LeaderSkill.RCV
+						friend = true
+					}
+				}
+			default:
+				//Apply to errbody
 				if !friend {
 					teamD[x].Damage[0].Value *= team.Team[0].LeaderSkill.ATK
 					teamD[x].Damage[1].Value *= team.Team[0].LeaderSkill.ATK
 					teamD[x].Damage[2].Value *= team.Team[0].LeaderSkill.RCV
 					friend = true
 				}
-			}
-		default:
-			//Apply to errbody
-			if !friend {
-				teamD[x].Damage[0].Value *= team.Team[0].LeaderSkill.ATK
-				teamD[x].Damage[1].Value *= team.Team[0].LeaderSkill.ATK
-				teamD[x].Damage[2].Value *= team.Team[0].LeaderSkill.RCV
-				friend = true
 			}
 		}
-
 		//FRIEND CONDITIONAL 2
-
-		switch team.Team[5].LeaderSkill.Conditional2[0] {
-		case "type":
-			//Apply only to conditional[1] types
-			if team.Team[x].Type == team.Team[5].LeaderSkill.Conditional2[1] ||
-				team.Team[x].Type2 == team.Team[5].LeaderSkill.Conditional2[1] {
-				if !friend {				
-					teamD[x].Damage[0].Value *= team.Team[0].LeaderSkill.ATK
-					teamD[x].Damage[1].Value *= team.Team[0].LeaderSkill.ATK
-					teamD[x].Damage[2].Value *= team.Team[0].LeaderSkill.RCV
-					friend = true
+		if len(team.Team[5].LeaderSkill.Conditional2) >= 1 {
+			switch team.Team[5].LeaderSkill.Conditional2[0] {
+			case "type":
+				//Apply only to conditional[1] types
+				if team.Team[x].Type == team.Team[5].LeaderSkill.Conditional2[1] ||
+					team.Team[x].Type2 == team.Team[5].LeaderSkill.Conditional2[1] {
+					if !friend {				
+						teamD[x].Damage[0].Value *= team.Team[0].LeaderSkill.ATK
+						teamD[x].Damage[1].Value *= team.Team[0].LeaderSkill.ATK
+						teamD[x].Damage[2].Value *= team.Team[0].LeaderSkill.RCV
+						friend = true
+					}
 				}
-			}
-		case "elem":
-			//Apply only to conditional[1] elements
-			if team.Team[x].Element == team.Team[5].LeaderSkill.Conditional2[1] ||
-				team.Team[x].Element2 == team.Team[5].LeaderSkill.Conditional2[1] {
-				
+			case "elem":
+				//Apply only to conditional[1] elements
+				if team.Team[x].Element == team.Team[5].LeaderSkill.Conditional2[1] ||
+					team.Team[x].Element2 == team.Team[5].LeaderSkill.Conditional2[1] {
+					
+					if !friend {
+						teamD[x].Damage[0].Value *= team.Team[0].LeaderSkill.ATK
+						teamD[x].Damage[1].Value *= team.Team[0].LeaderSkill.ATK
+						teamD[x].Damage[2].Value *= team.Team[0].LeaderSkill.RCV
+						friend = true
+					}
+				}
+			default:
+				//Apply to errbody
 				if !friend {
 					teamD[x].Damage[0].Value *= team.Team[0].LeaderSkill.ATK
 					teamD[x].Damage[1].Value *= team.Team[0].LeaderSkill.ATK
 					teamD[x].Damage[2].Value *= team.Team[0].LeaderSkill.RCV
 					friend = true
 				}
-			}
-		default:
-			//Apply to errbody
-			if !friend {
-				teamD[x].Damage[0].Value *= team.Team[0].LeaderSkill.ATK
-				teamD[x].Damage[1].Value *= team.Team[0].LeaderSkill.ATK
-				teamD[x].Damage[2].Value *= team.Team[0].LeaderSkill.RCV
-				friend = true
 			}
 		}
 	}

@@ -27,7 +27,9 @@
         Rows: {{meta.rows}}
         <br>
       </form>
-      <form ng-submit="combos()">
+      
+      <form ng-submit="combo()">
+        
         Fire: <input ng-model="orbs.fire" ng-list required />
         Water: <input ng-model="orbs.water" ng-list required/>
         Wood: <input ng-model="orbs.wood" ng-list required/>
@@ -38,10 +40,15 @@
         #Enhanced orbs: <input ng-model="orbs.enhanced_orbs" ng-list required/>
         #Rows: <input ng-model="orbs.row" ng-list required/>
         <br>
-        
+        <!-- This is fucking dumb. -->
+        <input type="submit" style="position: absolute; left: -9999px; width: 1px; height: 1px;"/>
+        <br>
+        <br>
+        Damage: {{damage}}
 
       </form>
     </div>
+  </body>
     <script>
     function mycontroller($scope) {
       var sock
@@ -74,9 +81,16 @@
         enhance: [],
         rows: []
       };
+      $scope.damage = ""
       
-      $scope.combos = function() {
+      $scope.combo = function() {
+        for (var $i in $scope.orbs) {
+          $scope.orbs[$i] = $scope.orbs[$i].map(function(x) {
+                return parseInt(x, 10);
+              })
+        };
         console.log(JSON.stringify($scope.orbs))
+        sock.send(JSON.stringify($scope.orbs))
       };
       
       $scope.submit = function() {
@@ -107,7 +121,8 @@
               });
           } else {
             $scope.$apply(function() {
-                
+                console.log(JSON.stringify(m))
+                $scope.damage = JSON.stringify(m)
               });
           }
         }
