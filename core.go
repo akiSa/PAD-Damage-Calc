@@ -206,7 +206,7 @@ func damageResolve (team teamL/*[]lookup*/, teamD []teamDamage, dmg []float64, m
 		}
 	}
 
-
+	fmt.Println(msg)
 	//Row Multipliers
 	//( 1 + ( 0.1 * n * r)) n = # rows, r = num awakenings
 	for x, _ := range teamD {
