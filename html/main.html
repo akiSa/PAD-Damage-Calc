@@ -170,8 +170,20 @@
                   $scope.meta.enhance = m.orb_enhances
                   $scope.meta.rows = m.row_enhances
                 }
-                $scope.orbs.leader_skill = m.team[0].leader_skill
-                $scope.orbs.friend_leader_skill = m.team[5].leader_skill
+                $scope.orbs.leader_skill.condition = m.team[0].leader_skill.condition
+                $scope.orbs.leader_skill.hp = m.team[0].leader_skill.hp
+                $scope.orbs.leader_skill.atk = m.team[0].leader_skill.atk
+                $scope.orbs.leader_skill.rcv = m.team[0].leader_skill.rcv
+                if $scope.orbs.leader_skill.condition === "" {
+                  $scope.orbs.leader_skill.condition = "all"
+                }
+                $scope.orbs.friend_leader_skill.condition = m.team[5].leader_skill.condition
+                $scope.orbs.friend_leader_skill.hp = m.team[5].leader_skill.hp
+                $scope.orbs.friend_leader_skill.atk = m.team[5].leader_skill.atk
+                $scope.orbs.friend_leader_skill.rcv = m.team[5].leader_skill.rcv
+                if $scope.orbs.friend_leader_skill.condition === "" {
+                  $scope.orbs.friend_leader_skill.condition = "all"
+                }
               });
           } else {
             $scope.$apply(function() {
