@@ -43,10 +43,10 @@
         <!-- This is fucking dumb. -->
         <input type="submit" style="position: absolute; left: -9999px; width: 1px; height: 1px;"/>
         Active:
-        <select ng-model="condition" ng-options="condition.name for condition in conditions" > </select>
-        <select ng-model="element" ng-options="element.name for element in elements" > </select>
-        <select ng-model="type" ng-options="type.name for type in types" > </select>
-        <input type="number" ng-model="orbs.Active[2]"  />
+        <input type="text" ng-model="orbs.active_ability[0]" />
+        <input type="number" ng-model="orbs.active_ability[1]" />
+        Multiplier:
+        <input type="number" ng-model="orbs.active_ability[2]"  />
         <br>
         Damage: {{damage}}
         
@@ -65,6 +65,7 @@
       }
 
       $scope.teamID = "77475";
+      $scope.default = [ 0,0 ]
       $scope.conditions = [
         {name: 'element'},
         {name: 'type'}
