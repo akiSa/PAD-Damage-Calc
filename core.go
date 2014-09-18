@@ -233,11 +233,11 @@ func damageResolve (team teamL/*[]lookup*/, teamD []teamDamage, dmg []float64, m
 				teamD[x].Damage[1].Value *= float64(msg.Active[2].(int))
 			}
 		case "elem":
-			if teamD[x].Damage[0].Element == msg.Active[1].(int){
-				teamD[x].Damage[0].Value *= float64(msg.Active[2].(int))
+			if teamD[x].Damage[0].Element == int(msg.Active[1].(float64)){
+				teamD[x].Damage[0].Value *= float64(msg.Active[2].(float64))
 			}
-			if teamD[x].Damage[1].Element == msg.Active[1].(int){
-				teamD[x].Damage[1].Value *= float64(msg.Active[2].(int))
+			if teamD[x].Damage[1].Element == int(msg.Active[1].(float64)){
+				teamD[x].Damage[1].Value *= float64(msg.Active[2].(float64))
 			}
 		}
 	}

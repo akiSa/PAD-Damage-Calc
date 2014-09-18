@@ -42,10 +42,14 @@
         <br>
         <!-- This is fucking dumb. -->
         <input type="submit" style="position: absolute; left: -9999px; width: 1px; height: 1px;"/>
-        <br>
+        Active:
+        <select ng-model="condition" ng-options="condition.name for condition in conditions" > </select>
+        <select ng-model="element" ng-options="element.name for element in elements" > </select>
+        <select ng-model="type" ng-options="type.name for type in types" > </select>
+        <input type="number" ng-model="orbs.Active[2]"  />
         <br>
         Damage: {{damage}}
-
+        
       </form>
     </div>
   </body>
@@ -61,6 +65,31 @@
       }
 
       $scope.teamID = "77475";
+      $scope.conditions = [
+        {name: 'element'},
+        {name: 'type'}
+      ];
+      $scope.elements = [
+        {name: 'fire', id:  0},
+        {name: 'water', id: 1},
+        {name: 'wood', id:  2},
+        {name: 'light', id: 3},
+        {name: 'dark', id:  4},
+        {name: 'heart', id: 5},
+      ]
+      $scope.types = [
+        {name: 'Evo', id: 0},
+        {name: 'Balanced', id: 1},
+        {name: 'Physical', id: 2},
+        {name: 'Healer', id: 3},
+        {name: 'Dragon', id: 4},
+        {name: 'God', id: 5},
+        {name: 'Attacker', id: 6},
+        {name: 'Devil', id: 7},
+        {name: 'Awoken Skill Material', id: 12},
+        {name: 'Protected', id: 13},
+        {name: 'Enhance', id: 14},
+      ]
       $scope.orbs = {
         fire: [],
         water: [],
@@ -69,7 +98,8 @@
         dark: [],
         heart: [],
         enhanced_orbs: [0,0,0,0,0],
-        rows: [0,0,0,0,0]
+        rows: [0,0,0,0,0],
+        active_ability: [ "elem", 1, 1 ]
       };
       $scope.image = [ "", "", "", "", "", "" ];
       $scope.stats = {
@@ -85,9 +115,11 @@
       
       $scope.combo = function() {
         for (var $i in $scope.orbs) {
-          $scope.orbs[$i] = $scope.orbs[$i].map(function(x) {
+          if ($i != "active_ability") {
+            $scope.orbs[$i] = $scope.orbs[$i].map(function(x) {
                 return parseInt(x, 10);
               })
+          }
         };
         console.log(JSON.stringify($scope.orbs))
         sock.send(JSON.stringify($scope.orbs))
