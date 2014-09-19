@@ -44,19 +44,19 @@
         <input type="submit" style="position: absolute; left: -9999px; width: 1px; height: 1px;"/>
         Active:
         <input type="text" ng-model="orbs.active_ability[0]" />
-        <input type="number" ng-model="orbs.active_ability[1]" />
+        <input type="number" ng-model="orbs.active_ability[1]" step="any"/>
         Multiplier:
-        <input type="number" ng-model="orbs.active_ability[2]"  />
+        <input type="number" ng-model="orbs.active_ability[2]" step="any" />
         <br>
         Leader Skill: <input ng-model="orbs.leader_skill.condition" ng-list required />
-        HP: <input type="number" ng-model="orbs.leader_skill.hp" />
-        ATK: <input type="number" ng-model="orbs.leader_skill.atk" />
-        RCV: <input type="number" ng-model="orbs.leader_skill.rcv" />
+        HP: <input type="number" ng-model="orbs.leader_skill.hp" step="any"/>
+        ATK: <input type="number" ng-model="orbs.leader_skill.atk" step="any"/>
+        RCV: <input type="number" ng-model="orbs.leader_skill.rcv" step="any"/>
         <br>
         Friend Leader Skill: <input type="text" ng-model="orbs.friend_leader_skill.condition" ng-list required/>
-        HP: <input type="number" ng-model="orbs.friend_leader_skill.hp" />
-        ATK: <input type="number" ng-model="orbs.friend_leader_skill.atk" />
-        RCV: <input type="number" ng-model="orbs.friend_leader_skill.rcv" />
+        HP: <input type="number" ng-model="orbs.friend_leader_skill.hp" step="any"/>
+        ATK: <input type="number" ng-model="orbs.friend_leader_skill.atk" step="any"/>
+        RCV: <input type="number" ng-model="orbs.friend_leader_skill.rcv" step="any"/>
         <br>
         Damage: {{damage}}
         
@@ -102,12 +102,12 @@
         {name: 'Enhance', id: 14},
       ]
       $scope.orbs = {
-        fire: [],
-        water: [],
-        wood: [],
-        light: [],
-        dark: [],
-        heart: [],
+        fire: [0],
+        water: [0],
+        wood: [0],
+        light: [0],
+        dark: [0],
+        heart: [0],
         enhanced_orbs: [0,0,0,0,0],
         rows: [0,0,0,0,0],
         active_ability: [ "elem", 1, 1 ],
