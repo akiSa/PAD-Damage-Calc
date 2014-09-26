@@ -145,40 +145,47 @@
           }
         };
 
+        var copy = $scope.orbs;
+
         //Need to do this once per element... far too tired to make this /look/ better, so I'm just going to copypasta it
-        for(var i = $scope.orbs.fire.length - 1; i >= 0; i--) {
-          if($scope.orbs.fire[i] === 0) {
-            $scope.orbs.fire.splice(i, 1);
+        for(var i = copy.fire.length - 1; i >= 0; i--) {
+          if(copy.fire[i] === 0) {
+            copy.fire.splice(i, 1);
           }
         }
-        for(var i = $scope.orbs.water.length - 1; i >= 0; i--) {
-          if($scope.orbs.water[i] === 0) {
-            $scope.orbs.water.splice(i, 1);
+        for(var i = copy.water.length - 1; i >= 0; i--) {
+          if(copy.water[i] === 0) {
+            copy.water.splice(i, 1);
           }
         }
-        for(var i = $scope.orbs.wood.length - 1; i >= 0; i--) {
-          if($scope.orbs.wood[i] === 0) {
-            $scope.orbs.wood.splice(i, 1);
+        for(var i = copy.wood.length - 1; i >= 0; i--) {
+          if(copy.wood[i] === 0) {
+            copy.wood.splice(i, 1);
           }
         }
-        for(var i = $scope.orbs.light.length - 1; i >= 0; i--) {
-          if($scope.orbs.light[i] === 0) {
-            $scope.orbs.light.splice(i, 1);
+        for(var i = copy.light.length - 1; i >= 0; i--) {
+          if(copy.light[i] === 0) {
+            copy.light.splice(i, 1);
           }
         }
-        for(var i = $scope.orbs.dark.length - 1; i >= 0; i--) {
-          if($scope.orbs.dark[i] === 0) {
-            $scope.orbs.dark.splice(i, 1);
+        for(var i = copy.dark.length - 1; i >= 0; i--) {
+          if(copy.dark[i] === 0) {
+            copy.dark.splice(i, 1);
           }
         }
-        for(var i = $scope.orbs.heart.length - 1; i >= 0; i--) {
-          if($scope.orbs.heart[i] === 0) {
-            $scope.orbs.heart.splice(i, 1);
+        for(var i = copy.heart.length - 1; i >= 0; i--) {
+          if(copy.heart[i] === 0) {
+            copy.heart.splice(i, 1);
           }
         }
 
-        console.log(JSON.stringify($scope.orbs))
-        sock.send(JSON.stringify($scope.orbs))
+        console.log(JSON.stringify(copy))
+        sock.send(JSON.stringify(copy))
+
+        //Check for empty lists
+        for (var attr in copy) {
+          if (copy[attr].length < 1) copy[attr] = [0];
+        }
       };
       
       $scope.submit = function() {
