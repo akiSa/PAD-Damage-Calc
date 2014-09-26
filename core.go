@@ -79,7 +79,7 @@ func damageResolve (team teamL/*[]lookup*/, teamD []teamDamage, dmg []float64, m
 		//Re-implementing leaderskill
 		switch msg.LeaderSkill.Condition[0].(string) {
 		case "type":
-			if msg.LeaderSkill.Condition[1].(int) == team.Team[x].Type || msg.LeaderSkill.Condition[1].(int) == team.Team[x].Type2 {
+			if msg.LeaderSkill.Condition[1].(float64) == float64(team.Team[x].Type) || msg.LeaderSkill.Condition[1].(float64) == float64(team.Team[x].Type2) {
 				teamD[x].Damage[0].Value *= msg.LeaderSkill.ATK
 				teamD[x].Damage[1].Value *= msg.LeaderSkill.ATK
 				teamD[x].Damage[2].Value *= msg.LeaderSkill.RCV
@@ -87,12 +87,12 @@ func damageResolve (team teamL/*[]lookup*/, teamD []teamDamage, dmg []float64, m
 			
 		case "elem":
 			if teamD[x].Damage[0].Element != nil{
-				if msg.LeaderSkill.Condition[1].(int) == *teamD[x].Damage[0].Element {
+				if msg.LeaderSkill.Condition[1].(float64) == float64(*teamD[x].Damage[0].Element) {
 					teamD[x].Damage[0].Value *= msg.LeaderSkill.ATK
 				}
 			}
 			if teamD[x].Damage[1].Element != nil{
-				if msg.LeaderSkill.Condition[1].(int) == *teamD[x].Damage[1].Element {
+				if msg.LeaderSkill.Condition[1].(float64) == float64(*teamD[x].Damage[1].Element) {
 					teamD[x].Damage[1].Value *= msg.LeaderSkill.ATK
 				}
 			}
@@ -105,19 +105,19 @@ func damageResolve (team teamL/*[]lookup*/, teamD []teamDamage, dmg []float64, m
 		//Friend leader skill!
 		switch msg.FLeaderSkill.Condition[0].(string) {
 		case "type":
-			if msg.FLeaderSkill.Condition[1].(int) == team.Team[x].Type || msg.FLeaderSkill.Condition[1].(int) == team.Team[x].Type2 {
+			if msg.FLeaderSkill.Condition[1].(float64) == float64(team.Team[x].Type) || msg.FLeaderSkill.Condition[1].(float64) == float64(team.Team[x].Type2) {
 				teamD[x].Damage[0].Value *= msg.FLeaderSkill.ATK
 				teamD[x].Damage[1].Value *= msg.FLeaderSkill.ATK
 				teamD[x].Damage[2].Value *= msg.FLeaderSkill.RCV
 			}
 		case "elem":
 			if teamD[x].Damage[0].Element != nil{
-				if msg.FLeaderSkill.Condition[1].(int) == *teamD[x].Damage[0].Element {
+				if msg.FLeaderSkill.Condition[1].(float64) == float64(*teamD[x].Damage[0].Element) {
 					teamD[x].Damage[0].Value *= msg.FLeaderSkill.ATK
 				}
 			}
 			if teamD[x].Damage[1].Element != nil{
-				if msg.FLeaderSkill.Condition[1].(int) == *teamD[x].Damage[1].Element {
+				if msg.FLeaderSkill.Condition[1].(float64) == float64(*teamD[x].Damage[1].Element) {
 					teamD[x].Damage[1].Value *= msg.FLeaderSkill.ATK
 				}
 			}
