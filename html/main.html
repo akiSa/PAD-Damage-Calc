@@ -44,19 +44,19 @@
         <input type="submit" style="position: absolute; left: -9999px; width: 1px; height: 1px;"/>
         Active:
         <input type="text" ng-model="orbs.active_ability[0]" />
-        <input type="number" ng-model="orbs.active_ability[1]" step="0.1"/>
+        <input type="number" ng-model="orbs.active_ability[1]" step="0.01"/>
         Multiplier:
-        <input type="number" ng-model="orbs.active_ability[2]" step="0.1" />
+        <input type="number" ng-model="orbs.active_ability[2]" step="0.01" />
         <br>
         Leader Skill: <input ng-model="orbs.leader_skill.condition" ng-list required />
-        HP: <input type="number" ng-model="orbs.leader_skill.hp" step="0.1"/>
-        ATK: <input type="number" ng-model="orbs.leader_skill.atk" step="0.1"/>
-        RCV: <input type="number" ng-model="orbs.leader_skill.rcv" step="0.1"/>
+        HP: <input type="number" ng-model="orbs.leader_skill.hp" step="0.01"/>
+        ATK: <input type="number" ng-model="orbs.leader_skill.atk" step="0.01"/>
+        RCV: <input type="number" ng-model="orbs.leader_skill.rcv" step="0.01"/>
         <br>
         Friend Leader Skill: <input type="text" ng-model="orbs.friend_leader_skill.condition" ng-list required/>
-        HP: <input type="number" ng-model="orbs.friend_leader_skill.hp" step="0.1"/>
-        ATK: <input type="number" ng-model="orbs.friend_leader_skill.atk" step="0.1"/>
-        RCV: <input type="number" ng-model="orbs.friend_leader_skill.rcv" step="0.1"/>
+        HP: <input type="number" ng-model="orbs.friend_leader_skill.hp" step="0.01"/>
+        ATK: <input type="number" ng-model="orbs.friend_leader_skill.atk" step="0.01"/>
+        RCV: <input type="number" ng-model="orbs.friend_leader_skill.rcv" step="0.01"/>
         <br>
         Damage: {{damage}}
         
