@@ -125,21 +125,61 @@
       
       <form ng-submit="combo()">
         <div class="container">
-        Fire: <input class="form-control" ng-model="orbs.fire" ng-list required />
-        Water: <input ng-model="orbs.water" ng-list required/>
-        Wood: <input ng-model="orbs.wood" ng-list required/>
-        Light: <input ng-model="orbs.light" ng-list required/>
-        Dark: <input ng-model="orbs.dark" ng-list required/>
-        Heart: <input ng-model="orbs.heart" ng-list required/>
+          <div class="row">
+            <div class="col-sm-4">
+              <label for="fireorbs"> Fire: </label>
+              <input class="form-control" ng-model="orbs.fire" ng-list required id="fireorbs" />
+            </div>
+            <div class="col-sm-4">
+              <label for="waterorbs"> Water: </label>
+              <input class="form-control" ng-model="orbs.water" ng-list required id="waterorbs" />
+            </div>
+            <div class="col-sm-4">
+              <label for="woodorbs"> Wood: </label>
+              <input class="form-control" ng-model="orbs.wood" ng-list required id="woodorbs" />
+            </div>            
+          </div>
+          <div class="row">
+            <div class="col-sm-4">
+              <label for="lightorbs"> Light: </label>
+              <input class="form-control" ng-model="orbs.light" ng-list required id="lightorbs" />
+            </div>
+            <div class="col-sm-4">
+              <label for="darkorbs"> Dark: </label>
+              <input class="form-control" ng-model="orbs.dark" ng-list required id="darkorbs" />
+            </div>
+            <div class="col-sm-4">
+              <label for="heartorbs"> Heart: </label>
+              <input class="form-control" ng-model="orbs.heart" ng-list required id="heartorbs" />
+            </div>            
+          </div>
+          
           <br>
-        #Enhanced orbs: <input ng-model="orbs.enhanced_orbs" ng-list required/>
-        #Rows: <input ng-model="orbs.rows" ng-list required/>
+          
+          <div class="row">
+            <div class="col-sm-6">
+              <label for="enhancednum"> Enhanced Orbs: </label>
+              <input class="form-control" ng-model="orbs.enhanced_orbs" ng-list required id="enhancednum"/>
+            </div>
+            <div class="col-sm-6">
+              <label for="rownum"> Rows: </label>
+              <input class="form-control" ng-model="orbs.rows" ng-list required id="rownum"/>
+            </div>
+          </div>
+
           <br>
+          
           <!-- This is fucking dumb. -->
           <input type="submit" style="position: absolute; left: -9999px; width: 1px; height: 1px;"/>
-        Active:
-          <input type="text" ng-model="orbs.active_ability[0]" />
-          <input type="number" ng-model="orbs.active_ability[1]" step="0.01"/>
+
+          <div class="row">
+            <div class="col-sm-4">
+              <label for="active"> Active (elem:0, type:1): </label>
+              <input class="form-control" type="number" ng-model="orbs.active_ability[0]" id="active"/>
+              <!-- NOTE, CHANGE THIS TO A DROPDOWN, BOTH OF THEM (full list of elements/types, just go from there... easier) -->
+              <input class="form-control" type="text" ng-model="orbs.active_ability[1]" />
+            </div>
+          </div>
         Multiplier:
           <input type="number" ng-model="orbs.active_ability[2]" step="0.01" />
           <br>
@@ -175,6 +215,29 @@
         return null;
       }
 
+      $scope.typelem = {
+        elem: {
+          fire: 0,
+          water: 1,
+          wood: 2,
+          light: 3,
+          dark: 4,
+          heart: 5
+        },
+        type = {
+          evo_material: 0,
+          balanced: 1,
+          physical: 2,
+          healer: 3,
+          dragon: 4,
+          god: 5,
+          attacker: 6,
+          devil:7,
+          awoken_skill_material: 12,
+          protected: 13,
+          enhance: 14
+        }
+      };
       $scope.teamID = "67401";
       $scope.default = [ 0,0 ]
       $scope.conditions = [
