@@ -31,6 +31,12 @@ const (
 	lightRow = 25
 	darkRow = 26
 	twoProng = 27
+
+	fireEnh = 14
+	waterEnh = 15
+	woodEnh = 16
+	lightEnh = 17
+	darkEnh = 18	
 )
 var MonMap map[int]*Monster
 var AwkMap map[int]*Awakenings

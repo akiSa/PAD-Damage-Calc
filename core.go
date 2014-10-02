@@ -17,32 +17,46 @@ func damageResolve (team teamL/*[]lookup*/, teamD []teamDamage, dmg []float64, m
 	//two prong, ugh
 	for _,y := range msg.Fire {
 		if y == 4 { tpacount[0] ++ }
-		comboCount ++
-		dmg[0] += 1 + (( y - 3)*0.25)
+		//if y == 0 { continue } (don't do any calcs)
+		//Or better yet, if y > 2 (do damage stuff and combocount++)
+		if y > 2 {
+			comboCount ++
+			dmg[0] += 1 + (( y - 3)*0.25)
+		}
 	}
 	for _,y := range msg.Water {
 		if y == 4 { tpacount[1] ++ }
-		comboCount ++
-		dmg[1] += 1 + (( y - 3)*0.25)
+		if y > 2 {
+			comboCount ++
+			dmg[1] += 1 + (( y - 3)*0.25)
+		}
 	}
 	for _,y := range msg.Wood {
 		if y == 4 { tpacount[2] ++ }
-		comboCount ++
-		dmg[2] += 1 + (( y - 3)*0.25)
+		if y > 2 {
+			comboCount ++
+			dmg[2] += 1 + (( y - 3)*0.25)
+		}
 	}
 	for _,y := range msg.Light {
 		if y == 4 { tpacount[3] ++ }
-		comboCount ++
-		dmg[3] += 1 + (( y - 3)*0.25)
+		if y > 2 {
+			comboCount ++
+			dmg[3] += 1 + (( y - 3)*0.25)
+		}
 	}
 	for _,y := range msg.Dark {
 		if y == 4 { tpacount[4] ++ }
-		comboCount ++
-		dmg[4] += 1 + (( y - 3)*0.25)
+		if y > 2 {
+			comboCount ++
+			dmg[4] += 1 + (( y - 3)*0.25)
+		}
 	}
 	for _,y := range msg.Heart {
-		comboCount ++
-		dmg[5] += 1 + (( y - 3)*0.25)
+		if y > 2 {
+			comboCount ++
+			dmg[5] += 1 + (( y - 3)*0.25)
+		}
 	}
 
 	comboMulti = 1 + (( comboCount - 1)*0.25)

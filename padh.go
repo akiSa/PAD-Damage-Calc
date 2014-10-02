@@ -81,17 +81,28 @@ func TeamLookup (ID int) (res teamL) {
 			switch awk {
 			case fireRow:
 				res.Rows[0] ++
+			case fireEnh:
+				res.Enhance[0] ++				
 			case waterRow:
 				res.Rows[1] ++
+			case waterEnh:
+				res.Enhance[1] ++
 			case woodRow:
 				res.Rows[2] ++
+			case woodEnh:
+				res.Enhance[2] ++
 			case lightRow:
 				res.Rows[3] ++
+			case lightEnh:
+				res.Enhance[3] ++
 			case darkRow:
 				res.Rows[4] ++
+			case darkEnh:
+				res.Enhance[4] ++
 			}
 		}
 	}
+
 
 	res.Initial = true
 	return
