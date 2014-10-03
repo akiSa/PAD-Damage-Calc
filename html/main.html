@@ -1,16 +1,25 @@
 <!DOCTYPE html>
-<html>
+<html >
   <head>
     <title>lolwut</title>
-    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular.min.js"></script>
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="stylesheet"
           href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+    <!-- <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular.min.js"></script>  -->
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.8/angular.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <script src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.10.0.js"></script>
+    <script>
+    var app = angular.module('appname', ['ui.bootstrap']);
+    </script>
   </head>
   <body>
-    <div class = "container-fluid" ng-app="" ng-controller="mycontroller">
+    <div class = "container-fluid" ng-app="appname" ng-controller="mycontroller">
       <div class="container">
         <div class="text-center">
           <form ng-submit="submit()">
@@ -173,16 +182,38 @@
           <input type="submit" style="position: absolute; left: -9999px; width: 1px; height: 1px;"/>
 
           <div class="row">
-            <div class="col-sm-4">
-              <label for="active"> Active (elem:0, type:1): </label>
-              <input class="form-control" type="number" ng-model="orbs.active_ability[0]" id="active"/>
-              <!-- NOTE, CHANGE THIS TO A DROPDOWN, BOTH OF THEM (full list of elements/types, just go from there... easier) -->
-              <input class="form-control" type="text" ng-model="orbs.active_ability[1]" />
+            <div class="col-sm-2">
+              <label for="typelemselect"> Type/Element: </label>
+              <div class="dropdown" id="typelemselect">
+                <a class="btn btn-default" data-toggle="dropdown">
+                  Elem/Type..
+                  <span class="caret"></span>
+                </a>
+                
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                  <li role="presentation" class="dropdown-header">Elements</li>
+                  <li ng-repeat="fgs in typelem.elem" >
+                    <a ng-click=clickfunc(fgs)> {{fgs.name}} </a>
+                  </li>
+                  <li role="presentation" class="divider"></li>
+                  <li role="presentation" class="dropdown-header">Types</li>
+                  <li ng-repeat="fgs in typelem.type" >
+                    <a ng-click=clickfunc(fgs)> {{fgs.name}} </a>
+                  </li>
+                </ul>
+
+                
+              </div>
+              
+            </div>
+            <div class="col-sm-2">
+              <label for="typelemulti"> Multiplier: </label>
+              <input class="form-control" type="number" ng-model="orbs.active_ability[2]" step="0.01" id="typelemulti" />
             </div>
           </div>
-        Multiplier:
-          <input type="number" ng-model="orbs.active_ability[2]" step="0.01" />
+
           <br>
+
         Leader Skill: <input ng-model="orbs.leader_skill.condition" ng-list required />
         HP: <input type="number" ng-model="orbs.leader_skill.hp" step="0.01"/>
         ATK: <input type="number" ng-model="orbs.leader_skill.atk" step="0.01"/>
@@ -206,6 +237,7 @@
   
     <script>
     function mycontroller($scope) {
+
       var sock
 
       window.onbeforeunload = function closingCode() {
@@ -216,28 +248,31 @@
       }
 
       $scope.typelem = {
-        elem: {
-          fire: 0,
-          water: 1,
-          wood: 2,
-          light: 3,
-          dark: 4,
-          heart: 5
-        },
-        type = {
-          evo_material: 0,
-          balanced: 1,
-          physical: 2,
-          healer: 3,
-          dragon: 4,
-          god: 5,
-          attacker: 6,
-          devil:7,
-          awoken_skill_material: 12,
-          protected: 13,
-          enhance: 14
-        }
+        elem: [
+          {name: "fire", data: [ "elem", 0, 1 ] },
+          {name: "water", data: [ "elem", 1, 1 ]},
+          {name: "wood", data: [ "elem", 2, 1 ]},
+          {name: "light", data: [ "elem", 3, 1 ]},
+          {name: "dark", data: [ "elem", 4, 1 ]},
+          {name: "heart", data: [ "elem", 5, 1 ]},
+        ],
+        type: [
+          {name: "evo_material", data: [ "type", 0, 1 ]},
+          {name: "balanced", data: [ "type", 1, 1 ]},
+          {name: "physical", data: [ "type", 2, 1 ]},
+          {name: "healer", data: [ "type", 3, 1 ]},
+          {name: "dragon", data: [ "type", 4, 1 ]},
+          {name: "god", data: [ "type", 5, 1 ]},
+          {name: "attacker", data: [ "type", 6, 1 ]},
+          {name: "devil", data:[ "type", 7, 1 ]},
+          {name: "awoken_skill_material", data: [ "type", 12, 1 ]},
+          {name: "protected", data: [ "type", 13, 1 ]},
+          {name: "enhance", data: [ "type", 14, 1 ]}
+        ]
       };
+      $scope.clickfunc = function (obj) {
+        $scope.orbs.active_ability=obj.data
+      }
       $scope.teamID = "67401";
       $scope.default = [ 0,0 ]
       $scope.conditions = [
