@@ -181,7 +181,8 @@
           <!-- This is fucking dumb. -->
           <input type="submit" style="position: absolute; left: -9999px; width: 1px; height: 1px;"/>
 
-          <div class="row">
+          <label for="Active Skill"> Active Skill </label>
+          <div class="row" id="Active Skill">
             <div class="col-sm-2">
               <label for="typelemselect"> Type/Element: </label>
               <div class="dropdown" id="typelemselect">
@@ -214,21 +215,70 @@
 
           <br>
 
-        Leader Skill: <input ng-model="orbs.leader_skill.condition" ng-list required />
-        HP: <input type="number" ng-model="orbs.leader_skill.hp" step="0.01"/>
-        ATK: <input type="number" ng-model="orbs.leader_skill.atk" step="0.01"/>
-        RCV: <input type="number" ng-model="orbs.leader_skill.rcv" step="0.01"/>
-          <br>
-        Friend Leader Skill: <input type="text" ng-model="orbs.friend_leader_skill.condition" ng-list required/>
-        HP: <input type="number" ng-model="orbs.friend_leader_skill.hp" step="0.01"/>
-        ATK: <input type="number" ng-model="orbs.friend_leader_skill.atk" step="0.01"/>
-        RCV: <input type="number" ng-model="orbs.friend_leader_skill.rcv" step="0.01"/>
+          <div class="row">
+            <div class="col-sm-2">
+              <label for="LSkill"> Leader Skill: </label>
+              <input class="form-control" ng-model="orbs.leader_skill.condition" ng-list required id="LSkill" disabled="true"/>
+            </div>
+            <div class="col-sm-2">
+              <label for="LSkillHP"> HP: </label>
+              <input class="form-control" type="number" ng-model="orbs.leader_skill.hp" step="0.01" id="LSkillHP" disabled="true"/>
+            </div>
+            <div class="col-sm-2">
+              <label for="LSkillATK"> Atk: </label>
+              <input class="form-control" type="number" ng-model="orbs.leader_skill.atk" step="0.01" id="LSkillATK" disabled="true"/>
+            </div>
+            <div class="col-sm-2">
+              <label for="LSkillRCV"> RCV: </label>
+              <input class="form-control" type="number" ng-model="orbs.leader_skill.rcv" step="0.01" id="LSkillRCV" disabled="true"/>
+            </div>
+            
+          </div>
+
           <br>
 
+          <div class="row">
+            <div class="col-sm-2">
+              <label for="FLSkill"> Friend Leader Skill: </label>
+              <input class="form-control" ng-model="orbs.friend_leader_skill.condition" ng-list required id="FLSkill" disabled="true"/>
+            </div>
+            <div class="col-sm-2">
+              <label for="FLSkillHP"> HP: </label>
+              <input class="form-control" type="number" ng-model="orbs.friend_leader_skill.hp" step="0.01" id="FLSkillHP" disabled="true"/>
+            </div>
+            <div class="col-sm-2">
+              <label for="FLSkillATK"> Atk: </label>
+              <input class="form-control" type="number" ng-model="orbs.friend_leader_skill.atk" step="0.01" id="FLSkillATK" disabled="true"/>
+            </div>
+            <div class="col-sm-2">
+              <label for="FLSkillRCV"> RCV: </label>
+              <input class="form-control" type="number" ng-model="orbs.friend_leader_skill.rcv" step="0.01" id="FLSkillRCV" disabled="true"/>
+            </div>
+            
+          </div>
+
+          <br>
         </div>
 
         <div class="container">
-        Damage: {{damage}}
+          <label for="Damage"> Damage: </label>
+          <div class="row" id="Damage">
+            <div class="col-md-4">
+              <div class="col-md-6">
+                <img ng-src="{{image[0]}}" />
+              </div>
+              <div class="col-md-6">
+                {{damage[0].damage[0].val}}
+                <br>
+                {{damage[0].damage[1].val}}
+                <br>
+                {{damage[0].damage[2].val}}
+              </div>
+            </div>
+
+            <br>
+          {{damage}}
+          </div>
         </div>
         
       </form>
@@ -434,7 +484,7 @@
           } else {
             $scope.$apply(function() {
                 console.log(JSON.stringify(m))
-                $scope.damage = JSON.stringify(m)
+                $scope.damage = m
               });
           }
         }
