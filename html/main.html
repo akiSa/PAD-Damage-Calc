@@ -187,7 +187,7 @@
               <label for="typelemselect"> Type/Element: </label>
               <div class="dropdown" id="typelemselect">
                 <a class="btn btn-default" data-toggle="dropdown">
-                  Elem/Type..
+                  {{TEList}}
                   <span class="caret"></span>
                 </a>
                 
@@ -296,7 +296,7 @@
         sock.close()
         return null;
       }
-
+      $scope.TEList = "Type/Elem.."
       $scope.typelem = {
         elem: [
           {name: "fire", data: [ "elem", 0, 1 ] },
@@ -322,6 +322,7 @@
       };
       $scope.clickfunc = function (obj) {
         $scope.orbs.active_ability=obj.data
+        $scope.TEList = obj.name
       }
       $scope.teamID = "67401";
       $scope.default = [ 0,0 ]

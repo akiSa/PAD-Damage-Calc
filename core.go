@@ -2,52 +2,60 @@ package main
 
 import (
 	"fmt"
+	"math"
 )
 //dmg = multiplier for the elements, 0-5 fire-heal
 //TODO: Factor in damage enhance AND row enhance, just crossreference the awakening list, hardcode what each one does basically >_>, have it auto set # of enhanced orbs on web front end, user can change.
 //Also, factor in active skill stuff
 func damageResolve (team teamL/*[]lookup*/, teamD []teamDamage, dmg []float64, msg *orbs) (res []teamDamage) {
+	//NOTE, dmg = multiplier for that colour.
 	var comboMulti float64
 	var comboCount float64
 	
 	comboMulti, comboCount=0,0
 
-	tpacount := []int{0,0,0,0,0}
+	tpacount := []float64{0,0,0,0,0}
 
 	//two prong, ugh
 	for _,y := range msg.Fire {
-		if y == 4 { tpacount[0] ++ }
+		if y == 4 {
+			tpacount[0] ++
+		} else if y > 2 {
 		//if y == 0 { continue } (don't do any calcs)
 		//Or better yet, if y > 2 (do damage stuff and combocount++)
-		if y > 2 {
+
 			comboCount ++
 			dmg[0] += 1 + (( y - 3)*0.25)
 		}
 	}
 	for _,y := range msg.Water {
-		if y == 4 { tpacount[1] ++ }
-		if y > 2 {
+		if y == 4 {
+			tpacount[1] ++
+		} else if y > 2 {
 			comboCount ++
 			dmg[1] += 1 + (( y - 3)*0.25)
 		}
 	}
 	for _,y := range msg.Wood {
-		if y == 4 { tpacount[2] ++ }
-		if y > 2 {
+		if y == 4 {
+			tpacount[2] ++
+		} else if y > 2 {
 			comboCount ++
 			dmg[2] += 1 + (( y - 3)*0.25)
 		}
 	}
 	for _,y := range msg.Light {
-		if y == 4 { tpacount[3] ++ }
-		if y > 2 {
+		if y == 4 {
+			tpacount[3] ++
+		} else if y > 2 {
 			comboCount ++
 			dmg[3] += 1 + (( y - 3)*0.25)
 		}
 	}
 	for _,y := range msg.Dark {
-		if y == 4 { tpacount[4] ++ }
-		if y > 2 {
+		if y == 4 {
+			tpacount[4] ++
+		} else if y > 2 {
 			comboCount ++
 			dmg[4] += 1 + (( y - 3)*0.25)
 		}
@@ -59,18 +67,31 @@ func damageResolve (team teamL/*[]lookup*/, teamD []teamDamage, dmg []float64, m
 		}
 	}
 
-	comboMulti = 1 + (( comboCount - 1)*0.25)
+	if comboCount >= 1 {
+		comboMulti = 1 + (( comboCount - 1)*0.25)
+	} else {
+		comboMulti = 0
+	}
 	fmt.Println("Combo Multiplier:", comboMulti)
 	//factor in leaderskill last
 	var subMulti float64
 	//var lead, friend bool
 	subMulti = 0
+	var numTpAwk float64
+	
 	for x,_ := range teamD {
 		//Main attribute
 		//lead,friend = false, false
+		numTpAwk = 0
 		teamD[x].Damage[0].Element = team.Team[x].Element
+		for _, awk := range team.Team[x].Awakenings {
+			if awk == twoProng {
+				numTpAwk ++
+			}
+		}
 		if team.Team[x].Element != nil {
-			teamD[x].Damage[0].Value = dmg[*team.Team[x].Element] * float64(team.Team[x].Stats.ATK) * comboMulti
+			
+			teamD[x].Damage[0].Value = ((tpacount[*team.Team[x].Element] * (1.25 * math.Pow(1.5, numTpAwk))) + dmg[*team.Team[x].Element]) * float64(team.Team[x].Stats.ATK) * comboMulti
 		}
 		//Sub attribute
 		if team.Team[x].Element2 != nil{
@@ -78,9 +99,14 @@ func damageResolve (team teamL/*[]lookup*/, teamD []teamDamage, dmg []float64, m
 		} else {
 			teamD[x].Damage[1].Element = nil
 		}
-		if team.Team[x].Element == team.Team[x].Element2 { subMulti = 0.10 } else { subMulti = 0.30 }
+
+		//Multiplier for sub element, 0.1 for same element, 0.3 if they differ.
 		if team.Team[x].Element2 != nil{
-			teamD[x].Damage[1].Value = dmg[*team.Team[x].Element2] * (float64(team.Team[x].Stats.ATK)*subMulti) * comboMulti
+			if *team.Team[x].Element == *team.Team[x].Element2 {
+				subMulti = 0.10
+			} else { subMulti = 0.30 }
+			
+			teamD[x].Damage[1].Value = ((tpacount[*team.Team[x].Element2] * (1.25 * math.Pow(1.5, numTpAwk))) + dmg[*team.Team[x].Element2]) * ( float64(team.Team[x].Stats.ATK)*subMulti ) * comboMulti
 		}
 		//Heal
 		temp := 6
@@ -143,6 +169,8 @@ func damageResolve (team teamL/*[]lookup*/, teamD []teamDamage, dmg []float64, m
 		
 	}
 
+	//fmt.Println(teamD[0].Damage[0].Value)
+
 	fmt.Println(msg)
 	//Row Multipliers
 	//( 1 + ( 0.1 * n * r)) n = # rows, r = num awakenings
@@ -190,26 +218,8 @@ func damageResolve (team teamL/*[]lookup*/, teamD []teamDamage, dmg []float64, m
 		}
 	}
 
-	//TWO PRONG ATTACk
-	fmt.Print("TWO PRONG: ")
-	fmt.Println(tpacount)
-	for x, _ := range teamD {
-		numawk := 0
-		for _, awk := range team.Team[x].Awakenings {
-			if awk == twoProng {
-				numawk ++
-			}
-		}
-		if numawk >= 1 {
-			if team.Team[x].Element != nil{
-				teamD[x].Damage[0].Value += ( 1 + ( float64(0.5) * float64(numawk) * float64(tpacount[*team.Team[x].Element])))
-			}
-			if team.Team[x].Element2 != nil {
-				teamD[x].Damage[1].Value += ( 1 + ( float64(0.5) * float64(numawk) * float64(tpacount[*team.Team[x].Element2])))
-			}
-		}
-	}
-	
+
+	fmt.Println(teamD[0].Damage[0].Value)
 	res = teamD
 	return
 }
