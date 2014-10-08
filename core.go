@@ -17,53 +17,18 @@ func damageResolve (team teamL/*[]lookup*/, teamD []teamDamage, dmg []float64, m
 	tpacount := []float64{0,0,0,0,0}
 
 	//two prong, ugh
-	for _,y := range msg.Fire {
-		if y == 4 {
-			tpacount[0] ++
-		} else if y > 2 {
-		//if y == 0 { continue } (don't do any calcs)
-		//Or better yet, if y > 2 (do damage stuff and combocount++)
-
-			comboCount ++
-			dmg[0] += 1 + (( y - 3)*0.25)
-		}
-	}
-	for _,y := range msg.Water {
-		if y == 4 {
-			tpacount[1] ++
-		} else if y > 2 {
-			comboCount ++
-			dmg[1] += 1 + (( y - 3)*0.25)
-		}
-	}
-	for _,y := range msg.Wood {
-		if y == 4 {
-			tpacount[2] ++
-		} else if y > 2 {
-			comboCount ++
-			dmg[2] += 1 + (( y - 3)*0.25)
-		}
-	}
-	for _,y := range msg.Light {
-		if y == 4 {
-			tpacount[3] ++
-		} else if y > 2 {
-			comboCount ++
-			dmg[3] += 1 + (( y - 3)*0.25)
-		}
-	}
-	for _,y := range msg.Dark {
-		if y == 4 {
-			tpacount[4] ++
-		} else if y > 2 {
-			comboCount ++
-			dmg[4] += 1 + (( y - 3)*0.25)
-		}
-	}
-	for _,y := range msg.Heart {
-		if y > 2 {
-			comboCount ++
-			dmg[5] += 1 + (( y - 3)*0.25)
+	for x, y := range msg.Orbs {
+		for _, z := range y {
+			if x != 5 && z[0] == 4 { //heal orbs can't tpa silly
+				tpacount[x]++
+				comboCount ++
+			} else {
+				if z[0] > 2 {
+					comboCount ++
+					fmt.Println(z)
+					dmg[x] += 1 + (( z[0] -3) * 0.25) + (0.06 * z[1])
+				}
+			}
 		}
 	}
 
@@ -73,6 +38,7 @@ func damageResolve (team teamL/*[]lookup*/, teamD []teamDamage, dmg []float64, m
 		comboMulti = 0
 	}
 	fmt.Println("Combo Multiplier:", comboMulti)
+	fmt.Println("TPA counter:", tpacount)
 	//factor in leaderskill last
 	var subMulti float64
 	//var lead, friend bool
@@ -90,8 +56,20 @@ func damageResolve (team teamL/*[]lookup*/, teamD []teamDamage, dmg []float64, m
 			}
 		}
 		if team.Team[x].Element != nil {
-			
-			teamD[x].Damage[0].Value = ((tpacount[*team.Team[x].Element] * (1.25 * math.Pow(1.5, numTpAwk))) + dmg[*team.Team[x].Element]) * float64(team.Team[x].Stats.ATK) * comboMulti
+			//(# of 4 matches * (1.25 * 1.5^#num tpa awakenings) + multiplier without all the tpa's) * atk * combo multiplier
+			//Get TPA out of the way
+			teamD[x].Damage[0].Value = 0
+			for _, y := range msg.Orbs[*team.Team[x].Element] {
+				//Find the TPA matches
+				if y[0] == 4  && numTpAwk > 0 {
+					teamD[x].Damage[0].Value += (1.25 * math.Pow(1.5, numTpAwk) + (0.06 * y[1]))
+				} else if y[0] == 4  && numTpAwk == 0 {
+					teamD[x].Damage[0].Value += (1 + ((y[0] - 3) * 0.25 )) + (0.06 * y[1])
+				}
+			}
+
+			teamD[x].Damage[0].Value += dmg[*team.Team[x].Element] // remember, dmg is the multiplier
+			teamD[x].Damage[0].Value *= float64(team.Team[x].Stats.ATK) * comboMulti
 		}
 		//Sub attribute
 		if team.Team[x].Element2 != nil{
@@ -105,8 +83,20 @@ func damageResolve (team teamL/*[]lookup*/, teamD []teamDamage, dmg []float64, m
 			if *team.Team[x].Element == *team.Team[x].Element2 {
 				subMulti = 0.10
 			} else { subMulti = 0.30 }
-			
-			teamD[x].Damage[1].Value = ((tpacount[*team.Team[x].Element2] * (1.25 * math.Pow(1.5, numTpAwk))) + dmg[*team.Team[x].Element2]) * ( float64(team.Team[x].Stats.ATK)*subMulti ) * comboMulti
+
+			teamD[x].Damage[1].Value = 0
+			for _, y := range msg.Orbs[*team.Team[x].Element2] {
+				//Find the TPA matches
+				if y[0] == 4 && numTpAwk > 0 {
+					teamD[x].Damage[1].Value += (1.25 * math.Pow(1.5, numTpAwk) + (0.06 * y[1]))
+				} else if y[0] == 4  && numTpAwk == 0 {
+					teamD[x].Damage[1].Value += (1 + ((y[0] - 3) * 0.25 )) + (0.06 * y[1])
+				}
+			}
+
+			teamD[x].Damage[1].Value += dmg[*team.Team[x].Element2]
+			teamD[x].Damage[1].Value *= ( float64(team.Team[x].Stats.ATK) * subMulti ) * comboMulti
+
 		}
 		//Heal
 		temp := 6
@@ -114,7 +104,7 @@ func damageResolve (team teamL/*[]lookup*/, teamD []teamDamage, dmg []float64, m
 		teamD[x].Damage[2].Value = dmg[5] * float64(team.Team[x].Stats.RCV) * comboMulti
 		//teamD
 		//team[x]
-		
+
 		//Leader Skill
 		//Re-implementing leaderskill
 		switch msg.LeaderSkill.Condition[0].(string) {
@@ -142,7 +132,7 @@ func damageResolve (team teamL/*[]lookup*/, teamD []teamDamage, dmg []float64, m
 			teamD[x].Damage[2].Value *= msg.LeaderSkill.RCV			
 		}
 
-		//Friend leader skill!
+				//Friend leader skill!
 		switch msg.FLeaderSkill.Condition[0].(string) {
 		case "type":
 			if msg.FLeaderSkill.Condition[1].(float64) == float64(team.Team[x].Type) || msg.FLeaderSkill.Condition[1].(float64) == float64(team.Team[x].Type2) {
@@ -169,9 +159,6 @@ func damageResolve (team teamL/*[]lookup*/, teamD []teamDamage, dmg []float64, m
 		
 	}
 
-	//fmt.Println(teamD[0].Damage[0].Value)
-
-	fmt.Println(msg)
 	//Row Multipliers
 	//( 1 + ( 0.1 * n * r)) n = # rows, r = num awakenings
 	for x, _ := range teamD {
@@ -183,18 +170,6 @@ func damageResolve (team teamL/*[]lookup*/, teamD []teamDamage, dmg []float64, m
 			teamD[x].Damage[1].Value *= (1 + (0.1 * float64(msg.Rows[*teamD[x].Damage[1].Element]) * float64(team.Rows[*teamD[x].Damage[0].Element])))
 		}
 	} //test
-
-	//Enhance orbs multiplier
-	//(1 + ( 0.06 * n )) n = # enhanced orbs
-	for x, _ := range teamD {
-		if teamD[x].Damage[0].Element != nil{
-			teamD[x].Damage[0].Value *= (1 + (0.06 * float64(msg.Enhance[*teamD[x].Damage[0].Element])))
-		}
-		if teamD[x].Damage[1].Element != nil{
-			teamD[x].Damage[1].Value *= (1 + (0.06 * float64(msg.Enhance[*teamD[x].Damage[1].Element])))
-		}
-	}
-
 
 	//Active skill multiplier. (Strict multiplier.. if no active skill, put [ "type/elem", 1, 1 ]
 	for x, _ := range teamD {
@@ -218,8 +193,6 @@ func damageResolve (team teamL/*[]lookup*/, teamD []teamDamage, dmg []float64, m
 		}
 	}
 
-
-	fmt.Println(teamD[0].Damage[0].Value)
 	res = teamD
 	return
 }

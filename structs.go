@@ -2,12 +2,13 @@ package main
 
 //9 = no element
 type orbs struct {
-	Fire []float64 `json:"fire"`
-	Water []float64 `json:"water"`
-	Wood []float64 `json:"wood"`
-	Dark []float64 `json:"dark"`
-	Light []float64 `json:"light"`
-	Heart []float64 `json:"heart"`
+	Orbs [][][]float64 `json:"orbs"` //[] of the fire/water/ etc
+	// Fire [][]float64 `json:"fire"` //[ [3, 1 ] ] = 3 orbs, 1 of them are enhanced.
+	// Water [][]float64 `json:"water"`
+	// Wood [][]float64 `json:"wood"`
+	// Dark [][]float64 `json:"dark"`
+	// Light [][]float64 `json:"light"`
+	// Heart [][]float64 `json:"heart"`
 	Rows []float64 `json:"rows"` //# of rows per colour [ x x x x x x ]
 	Enhance []float64 `json:"enhanced_orbs"` //# of enhanced orbs per colour [ x x x x x x ]
 	Active []interface{} `json:"active_ability"` //[ "type", 2, 3] //Type 2, 3x

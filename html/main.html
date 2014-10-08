@@ -137,29 +137,29 @@
           <div class="row">
             <div class="col-sm-4">
               <label for="fireorbs"> Fire: </label>
-              <input class="form-control" ng-model="orbs.fire" ng-list required id="fireorbs" />
+              <input class="form-control" ng-model="temporbs[0]" id="fireorbs" />
             </div>
             <div class="col-sm-4">
               <label for="waterorbs"> Water: </label>
-              <input class="form-control" ng-model="orbs.water" ng-list required id="waterorbs" />
+              <input class="form-control" ng-model="temporbs[1]" id="waterorbs" />
             </div>
             <div class="col-sm-4">
               <label for="woodorbs"> Wood: </label>
-              <input class="form-control" ng-model="orbs.wood" ng-list required id="woodorbs" />
+              <input class="form-control" ng-model="temporbs[2]" id="woodorbs" />
             </div>            
           </div>
           <div class="row">
             <div class="col-sm-4">
               <label for="lightorbs"> Light: </label>
-              <input class="form-control" ng-model="orbs.light" ng-list required id="lightorbs" />
+              <input class="form-control" ng-model="temporbs[3]" id="lightorbs" />
             </div>
             <div class="col-sm-4">
               <label for="darkorbs"> Dark: </label>
-              <input class="form-control" ng-model="orbs.dark" ng-list required id="darkorbs" />
+              <input class="form-control" ng-model="temporbs[4]" id="darkorbs" />
             </div>
             <div class="col-sm-4">
               <label for="heartorbs"> Heart: </label>
-              <input class="form-control" ng-model="orbs.heart" ng-list required id="heartorbs" />
+              <input class="form-control" ng-model="temporbs[5]" id="heartorbs" />
             </div>            
           </div>
           
@@ -351,13 +351,25 @@
         {name: 'Protected', id: 13},
         {name: 'Enhance', id: 14},
       ]
+      $scope.temporbs = [
+        "0",
+        "0",
+        "0",
+        "0",
+        "3+3, 3",
+        "0",
+      ];
+      // {
+        
+      //   fire: [],
+      //   water: [],
+      //   wood: [],
+      //   light: [],
+      //   dark: [],
+      //   heart: []
+      // }
       $scope.orbs = {
-        fire: [0],
-        water: [0],
-        wood: [0],
-        light: [0],
-        dark: [0],
-        heart: [0],
+        orbs: [],
         enhanced_orbs: [0,0,0,0,0],
         rows: [0,0,0,0,0],
         active_ability: [ "elem", 1, 1 ],
@@ -387,60 +399,91 @@
       $scope.damage = ""
       
       $scope.combo = function() {
-        for (var $i in $scope.orbs) {
-          if ($i != "active_ability" && $i != "leader_skill" && $i != "friend_leader_skill") {
-            $scope.orbs[$i] = $scope.orbs[$i].map(function(x) {
-                return parseInt(x, 10);
+        for (var $x in $scope.temporbs) {
+          //$scope.orbs.orbs[count]
+          //First, split by ",", to get a list of [ "3+3", "3"...]
+          //console.log($scope.temporbs)
+          var list = $scope.temporbs[$x].split(",");
+          //Then, iterate over list and split by "+", list= that output
+          for (var $t in list) {
+            list[$t] = list[$t].split("+");
+          }
+          //list = list.split("+");
+
+          //then, iterate over list again, it should be a list of lists, [["3","3"], ["3"]]
+          //check the len of each one, if len <2, then append a 0. giving: [["3","3"],["3",0]]
+          for (var $y in list) {
+            if (list[$y].length < 2) {
+              list[$y].push(0)
+            }
+          }
+
+          //then, convert everything to int (yes, if they put letters it'll crash, fuck the free world
+          for (var $z in list) {
+            list[$z] = list[$z].map(function(k) {
+                return parseInt(k, 10);
               })
           }
+
+          //Then:
+          $scope.orbs.orbs[$x] = list
+          //};
+          // for (var $i in $scope.orbs) {
+          //   if ($i != "active_ability" && $i != "leader_skill" && $i != "friend_leader_skill") {
+          //     $scope.orbs[$i] = $scope.orbs[$i].map(function(x) {
+          //         return parseInt(x, 10);
+          //       })
+          //   }
+          //}
         };
 
-        var copy = $scope.orbs;
+        //var copy = $scope.orbs;
 
         //Need to do this once per element... far too tired to make this /look/ better, so I'm just going to copypasta it
-        for(var i = copy.fire.length - 1; i >= 0; i--) {
-          if(copy.fire[i] === 0) {
-            copy.fire.splice(i, 1);
-          }
-        }
-        for(var i = copy.water.length - 1; i >= 0; i--) {
-          if(copy.water[i] === 0) {
-            copy.water.splice(i, 1);
-          }
-        }
-        for(var i = copy.wood.length - 1; i >= 0; i--) {
-          if(copy.wood[i] === 0) {
-            copy.wood.splice(i, 1);
-          }
-        }
-        for(var i = copy.light.length - 1; i >= 0; i--) {
-          if(copy.light[i] === 0) {
-            copy.light.splice(i, 1);
-          }
-        }
-        for(var i = copy.dark.length - 1; i >= 0; i--) {
-          if(copy.dark[i] === 0) {
-            copy.dark.splice(i, 1);
-          }
-        }
-        for(var i = copy.heart.length - 1; i >= 0; i--) {
-          if(copy.heart[i] === 0) {
-            copy.heart.splice(i, 1);
-          }
-        }
+        // for(var i = copy.fire.length - 1; i >= 0; i--) {
+        //   if(copy.fire[i] === 0) {
+        //     copy.fire.splice(i, 1);
+        //   }
+        // }
+        // for(var i = copy.water.length - 1; i >= 0; i--) {
+        //   if(copy.water[i] === 0) {
+        //     copy.water.splice(i, 1);
+        //   }
+        // }
+        // for(var i = copy.wood.length - 1; i >= 0; i--) {
+        //   if(copy.wood[i] === 0) {
+        //     copy.wood.splice(i, 1);
+        //   }
+        // }
+        // for(var i = copy.light.length - 1; i >= 0; i--) {
+        //   if(copy.light[i] === 0) {
+        //     copy.light.splice(i, 1);
+        //   }
+        // }
+        // for(var i = copy.dark.length - 1; i >= 0; i--) {
+        //   if(copy.dark[i] === 0) {
+        //     copy.dark.splice(i, 1);
+        //   }
+        // }
+        // for(var i = copy.heart.length - 1; i >= 0; i--) {
+        //   if(copy.heart[i] === 0) {
+        //     copy.heart.splice(i, 1);
+        //   }
+        // }
 
-        console.log(JSON.stringify(copy))
-        sock.send(JSON.stringify(copy))
+        console.log(JSON.stringify($scope.orbs))
+        
+        sock.send(JSON.stringify($scope.orbs))
 
         //Check for empty lists
-        for (var attr in copy) {
-          if (copy[attr].length < 1) copy[attr] = [0];
-        }
+        // for (var attr in copy) {
+        //   if (copy[attr].length < 1) copy[attr] = [0];
+        // }
       };
       
       $scope.submit = function() {
         //54.88.52.106 note, change this val to ip of server
-        sock = new WebSocket("ws://54.88.52.106:8080/team/" + $scope.teamID + "/");
+        sock = new WebSocket("ws://localhost:8080/team/" + $scope.teamID + "/");
         //console.log ($scope.teamID)
         sock.onopen = function () { }
         sock.onmessage = function (message) {
