@@ -175,9 +175,9 @@ func damageResolve (team teamL/*[]lookup*/, teamD []teamDamage, dmg []float64, m
 	for x, _ := range teamD {
 		switch msg.Active[0].(string) {
 		case "type":
-			if team.Team[x].Type == msg.Active[1].(int) || team.Team[x].Type2 == msg.Active[1].(int) {
-				teamD[x].Damage[0].Value *= float64(msg.Active[2].(int))
-				teamD[x].Damage[1].Value *= float64(msg.Active[2].(int))
+			if team.Team[x].Type == int(msg.Active[1].(float64)) || team.Team[x].Type2 == int(msg.Active[1].(float64)) {
+				teamD[x].Damage[0].Value *= float64(msg.Active[2].(float64))
+				teamD[x].Damage[1].Value *= float64(msg.Active[2].(float64))
 			}
 		case "elem":
 			if teamD[x].Damage[0].Element != nil{

@@ -275,10 +275,71 @@
                 {{damage[0].damage[2].val}}
               </div>
             </div>
-
-            <br>
-          {{damage}}
+            <div class="col-md-4">
+              <div class="col-md-6">
+                <img ng-src="{{image[1]}}" />
+              </div>
+              <div class="col-md-6">
+                {{damage[1].damage[0].val}}
+                <br>
+                {{damage[1].damage[1].val}}
+                <br>
+                {{damage[1].damage[2].val}}
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="col-md-6">
+                <img ng-src="{{image[2]}}" />
+              </div>
+              <div class="col-md-6">
+                {{damage[2].damage[0].val}}
+                <br>
+                {{damage[2].damage[1].val}}
+                <br>
+                {{damage[2].damage[2].val}}
+              </div>
+            </div>
           </div>
+
+          <div class="row" id="Damage2">
+            <div class="col-md-4">
+              <div class="col-md-6">
+                <img ng-src="{{image[3]}}" />
+              </div>
+              <div class="col-md-6">
+                {{damage[3].damage[0].val}}
+                <br>
+                {{damage[3].damage[1].val}}
+                <br>
+                {{damage[3].damage[2].val}}
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="col-md-6">
+                <img ng-src="{{image[4]}}" />
+              </div>
+              <div class="col-md-6">
+                {{damage[4].damage[0].val}}
+                <br>
+                {{damage[4].damage[1].val}}
+                <br>
+                {{damage[4].damage[2].val}}
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="col-md-6">
+                <img ng-src="{{image[5]}}" />
+              </div>
+              <div class="col-md-6">
+                {{damage[5].damage[0].val}}
+                <br>
+                {{damage[5].damage[1].val}}
+                <br>
+                {{damage[5].damage[2].val}}
+              </div>
+            </div>
+          </div>
+
         </div>
         
       </form>
@@ -351,23 +412,16 @@
         {name: 'Protected', id: 13},
         {name: 'Enhance', id: 14},
       ]
+      //should be earth fire water wind heart imo >_>
       $scope.temporbs = [
-        "0",
-        "0",
-        "0",
-        "0",
-        "3+3, 3",
-        "0",
+        "0", //fire
+        "0", //water
+        "0", //wood
+        "0", //light
+        "3+3, 3", //dark
+        "0", //heal/heart, w.e
       ];
-      // {
-        
-      //   fire: [],
-      //   water: [],
-      //   wood: [],
-      //   light: [],
-      //   dark: [],
-      //   heart: []
-      // }
+
       $scope.orbs = {
         orbs: [],
         enhanced_orbs: [0,0,0,0,0],
@@ -400,15 +454,12 @@
       
       $scope.combo = function() {
         for (var $x in $scope.temporbs) {
-          //$scope.orbs.orbs[count]
           //First, split by ",", to get a list of [ "3+3", "3"...]
-          //console.log($scope.temporbs)
           var list = $scope.temporbs[$x].split(",");
           //Then, iterate over list and split by "+", list= that output
           for (var $t in list) {
             list[$t] = list[$t].split("+");
           }
-          //list = list.split("+");
 
           //then, iterate over list again, it should be a list of lists, [["3","3"], ["3"]]
           //check the len of each one, if len <2, then append a 0. giving: [["3","3"],["3",0]]
@@ -418,7 +469,7 @@
             }
           }
 
-          //then, convert everything to int (yes, if they put letters it'll crash, fuck the free world
+          //then, convert everything to int (yes, if they put letters it'll crash, fuck the free world)
           for (var $z in list) {
             list[$z] = list[$z].map(function(k) {
                 return parseInt(k, 10);
@@ -427,61 +478,12 @@
 
           //Then:
           $scope.orbs.orbs[$x] = list
-          //};
-          // for (var $i in $scope.orbs) {
-          //   if ($i != "active_ability" && $i != "leader_skill" && $i != "friend_leader_skill") {
-          //     $scope.orbs[$i] = $scope.orbs[$i].map(function(x) {
-          //         return parseInt(x, 10);
-          //       })
-          //   }
-          //}
         };
-
-        //var copy = $scope.orbs;
-
-        //Need to do this once per element... far too tired to make this /look/ better, so I'm just going to copypasta it
-        // for(var i = copy.fire.length - 1; i >= 0; i--) {
-        //   if(copy.fire[i] === 0) {
-        //     copy.fire.splice(i, 1);
-        //   }
-        // }
-        // for(var i = copy.water.length - 1; i >= 0; i--) {
-        //   if(copy.water[i] === 0) {
-        //     copy.water.splice(i, 1);
-        //   }
-        // }
-        // for(var i = copy.wood.length - 1; i >= 0; i--) {
-        //   if(copy.wood[i] === 0) {
-        //     copy.wood.splice(i, 1);
-        //   }
-        // }
-        // for(var i = copy.light.length - 1; i >= 0; i--) {
-        //   if(copy.light[i] === 0) {
-        //     copy.light.splice(i, 1);
-        //   }
-        // }
-        // for(var i = copy.dark.length - 1; i >= 0; i--) {
-        //   if(copy.dark[i] === 0) {
-        //     copy.dark.splice(i, 1);
-        //   }
-        // }
-        // for(var i = copy.heart.length - 1; i >= 0; i--) {
-        //   if(copy.heart[i] === 0) {
-        //     copy.heart.splice(i, 1);
-        //   }
-        // }
-
         console.log(JSON.stringify($scope.orbs))
-        
         sock.send(JSON.stringify($scope.orbs))
-
-        //Check for empty lists
-        // for (var attr in copy) {
-        //   if (copy[attr].length < 1) copy[attr] = [0];
-        // }
-      };
+      }
       
-      $scope.submit = function() {
+        $scope.submit = function() {
         //54.88.52.106 note, change this val to ip of server
         sock = new WebSocket("ws://localhost:8080/team/" + $scope.teamID + "/");
         //console.log ($scope.teamID)
