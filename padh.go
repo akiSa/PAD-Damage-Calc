@@ -76,29 +76,39 @@ func TeamLookup (ID int) (res teamL) {
 
 	res.Team = append(res.Team, friend)
 
-	for _, y := range res.Team {
+	for x, y := range res.Team {
+		awkCount := 1
 		for _, awk := range y.Awakenings {
-			switch awk {
-			case fireRow:
-				res.Rows[0] ++
-			case fireEnh:
-				res.Enhance[0] ++				
-			case waterRow:
-				res.Rows[1] ++
-			case waterEnh:
-				res.Enhance[1] ++
-			case woodRow:
-				res.Rows[2] ++
-			case woodEnh:
-				res.Enhance[2] ++
-			case lightRow:
-				res.Rows[3] ++
-			case lightEnh:
-				res.Enhance[3] ++
-			case darkRow:
-				res.Rows[4] ++
-			case darkEnh:
-				res.Enhance[4] ++
+			if awkCount <= y.CurrAwaken {
+				switch awk {
+				case fireRow:
+					res.Rows[0] ++
+				case fireEnh:
+					res.Enhance[0] ++				
+				case waterRow:
+					res.Rows[1] ++
+				case waterEnh:
+					res.Enhance[1] ++
+				case woodRow:
+					res.Rows[2] ++
+				case woodEnh:
+					res.Enhance[2] ++
+				case lightRow:
+					res.Rows[3] ++
+				case lightEnh:
+					res.Enhance[3] ++
+				case darkRow:
+					res.Rows[4] ++
+				case darkEnh:
+					res.Enhance[4] ++
+				case awkHP:
+					res.Team[x].Stats.HP += 200
+				case awkATK:
+					res.Team[x].Stats.ATK += 100
+				case awkRCV:
+					res.Team[x].Stats.RCV += 50
+				}
+				awkCount ++
 			}
 		}
 	}

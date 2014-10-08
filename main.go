@@ -36,7 +36,11 @@ const (
 	waterEnh = 15
 	woodEnh = 16
 	lightEnh = 17
-	darkEnh = 18	
+	darkEnh = 18
+
+	awkHP = 1
+	awkATK = 2
+	awkRCV = 3
 )
 var MonMap map[int]*Monster
 var AwkMap map[int]*Awakenings
