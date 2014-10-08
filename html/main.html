@@ -25,6 +25,8 @@
           <form ng-submit="submit()">
             <div class="row">
               <div class="col-md-4">
+              </div>
+              <div class="col-md-4">
                 <label for="teamID"> PADHerder Team ID: </label>
                 <input class="form-control" type="text" ng-model="teamID" id="teamID"/>
               </div>
@@ -117,21 +119,55 @@
               
             </div>
             <br>
-            Enhanced Orbs:
-            <span style="color:red" > {{meta.enhance[0]}} </span>
-            <span style="color:blue" > {{meta.enhance[1]}} </span>
-            <span style="color:green" > {{meta.enhance[2]}} </span>
-            <span style="color:yellow" > {{meta.enhance[3]}} </span>
-            <span style="color:black" > {{meta.enhance[4]}} </span>
-            <br>
+            <label for="enhancedawks"> Enhanced Orb Awakenings: </label>
+            <div class="row" id="enhancedawks">
+              <div class="col-md-2">
+                <img ng-src="http://4.bp.blogspot.com/-kLX6wH50f1Q/UmA2BbmJIwI/AAAAAAAAA4g/JqhrSEtJfkw/s1600/fire.png" style="max-width:25px"/>
+                {{meta.enhance[0]}}
+              </div>
+              <div class="col-md-2">
+                <img ng-src="http://2.bp.blogspot.com/-sEHLWCvgLRs/UmA2CC7tBuI/AAAAAAAAA44/pCVrc6POzzc/s1600/water.png" style="max-width:25px" />
+                {{meta.enhance[1]}}
+              </div>
+              <div class="col-md-2">
+                <img ng-src="http://3.bp.blogspot.com/-5NQpu19aCpo/UmA2CndZZPI/AAAAAAAAA40/sdGccHhPSc4/s1600/wood.png" style="max-width:25px" />
+                {{meta.enhance[2]}}
+              </div>
+              <div class="col-md-2">
+                <img ng-src="http://4.bp.blogspot.com/-aUuJzB5NUA0/UmA2CNZoYHI/AAAAAAAAA4k/NnimTwgunNM/s1600/light.png" style="max-width:25px" />
+                {{meta.enhance[3]}}
+              </div>
+              <div class="col-md-2">
+                <img ng-src="http://3.bp.blogspot.com/-_hlcdF0KXzk/UmA2BUKk7nI/AAAAAAAAA4c/_fhvH7B-ZCs/s1600/dark.png" style="max-width:25px" />
+                {{meta.enhance[4]}}
+              </div>
 
-            Rows:
-            <span style="color:red" > {{meta.rows[0]}} </span>
-            <span style="color:blue" > {{meta.rows[1]}} </span>
-            <span style="color:green" > {{meta.rows[2]}} </span>
-            <span style="color:yellow" > {{meta.rows[3]}} </span>
-            <span style="color:black" > {{meta.rows[4]}} </span>
-            <br>
+            </div>
+
+            <label for="enhancedrows"> Row Awakenings: </label>
+            <div class="row" id="enhancedrows">
+              <div class="col-md-2">
+                <img ng-src="http://4.bp.blogspot.com/-kLX6wH50f1Q/UmA2BbmJIwI/AAAAAAAAA4g/JqhrSEtJfkw/s1600/fire.png" style="max-width:25px"/>
+                {{meta.rows[0]}}
+              </div>
+              <div class="col-md-2">
+                <img ng-src="http://2.bp.blogspot.com/-sEHLWCvgLRs/UmA2CC7tBuI/AAAAAAAAA44/pCVrc6POzzc/s1600/water.png" style="max-width:25px" />
+                {{meta.rows[1]}}
+              </div>
+              <div class="col-md-2">
+                <img ng-src="http://3.bp.blogspot.com/-5NQpu19aCpo/UmA2CndZZPI/AAAAAAAAA40/sdGccHhPSc4/s1600/wood.png" style="max-width:25px" />
+                {{meta.rows[2]}}
+              </div>
+              <div class="col-md-2">
+                <img ng-src="http://4.bp.blogspot.com/-aUuJzB5NUA0/UmA2CNZoYHI/AAAAAAAAA4k/NnimTwgunNM/s1600/light.png" style="max-width:25px" />
+                {{meta.rows[3]}}
+              </div>
+              <div class="col-md-2">
+                <img ng-src="http://3.bp.blogspot.com/-_hlcdF0KXzk/UmA2BUKk7nI/AAAAAAAAA4c/_fhvH7B-ZCs/s1600/dark.png" style="max-width:25px" />
+                {{meta.rows[4]}}
+              </div>
+
+            </div>
             <br>
           </form>
         </div>
@@ -171,13 +207,13 @@
           <br>
           
           <div class="row">
-            <div class="col-sm-6">
-              <label for="enhancednum"> Enhanced Orbs: </label>
-              <input class="form-control" ng-model="orbs.enhanced_orbs" ng-list required id="enhancednum"/>
-            </div>
+
             <div class="col-sm-6">
               <label for="rownum"> Rows: </label>
               <input class="form-control" ng-model="orbs.rows" ng-list required id="rownum"/>
+            </div>
+            <div class="col-sm-6">
+
             </div>
           </div>
 
@@ -344,7 +380,34 @@
               </div>
             </div>
           </div>
-
+          <label for="Summary"> Summary: </label>
+          <div class="row" id="Summary">
+            <div class="col-md-2">
+              <img ng-src="http://4.bp.blogspot.com/-kLX6wH50f1Q/UmA2BbmJIwI/AAAAAAAAA4g/JqhrSEtJfkw/s1600/fire.png" style="max-width:25px"/>
+              {{damagesummary[0]}}
+            </div>
+            <div class="col-md-2">
+              <img ng-src="http://2.bp.blogspot.com/-sEHLWCvgLRs/UmA2CC7tBuI/AAAAAAAAA44/pCVrc6POzzc/s1600/water.png" style="max-width:25px" />
+              {{damagesummary[1]}}
+            </div>
+            <div class="col-md-2">
+              <img ng-src="http://3.bp.blogspot.com/-5NQpu19aCpo/UmA2CndZZPI/AAAAAAAAA40/sdGccHhPSc4/s1600/wood.png" style="max-width:25px" />
+              {{damagesummary[2]}}
+            </div>
+            <div class="col-md-2">
+              <img ng-src="http://4.bp.blogspot.com/-aUuJzB5NUA0/UmA2CNZoYHI/AAAAAAAAA4k/NnimTwgunNM/s1600/light.png" style="max-width:25px" />
+               {{damagesummary[3]}}
+            </div>
+            <div class="col-md-2">
+              <img ng-src="http://3.bp.blogspot.com/-_hlcdF0KXzk/UmA2BUKk7nI/AAAAAAAAA4c/_fhvH7B-ZCs/s1600/dark.png" style="max-width:25px" />
+               {{damagesummary[4]}}
+            </div>
+            <div class="col-md-2">
+              <img ng-src="http://3.bp.blogspot.com/-AbxWo0MnH-I/UmA2BVJJJ5I/AAAAAAAAA48/Rqw0dZDQsMY/s1600/heart.png" style="max-width:25px" />
+              {{damagesummary[5]}}
+            </div>
+          </div>
+          
         </div>
         
       </form>
@@ -456,7 +519,7 @@
         rows: [0,0,0,0,0]
       };
       $scope.damage = ""
-      
+      $scope.damagesummary = [0,0,0,0,0,0]
       $scope.combo = function() {
         for (var $x in $scope.temporbs) {
           //First, split by ",", to get a list of [ "3+3", "3"...]
@@ -536,6 +599,28 @@
             $scope.$apply(function() {
                 console.log(JSON.stringify(m))
                 $scope.damage = m
+
+                //for (var i = 0; i < $scope.image.length; i++)
+                //for (var $x in $scope.temporbs) {
+                console.log($scope.damagesummary)
+                for (var $i in $scope.damagesummary) {
+                  $scope.damagesummary[$i] = 0
+                }
+                for (var $x in m) {
+                  for (var $y in m[$x].damage) {
+                    if (m[$x].damage[0].element != null) {
+                      $scope.damagesummary[m[$x].damage[0].element] += m[$x].damage[0].val
+                    }
+                    if (m[$x].damage[1].element != null) {
+                      $scope.damagesummary[m[$x].damage[1].element] += m[$x].damage[1].val
+                    }
+                    if (m[$x].damage[2].element != null) {
+                      $scope.damagesummary[5] += m[$x].damage[2].val
+                    }
+                  }
+                }
+                console.log($scope.damagesummary)
+                //$scope.damagesummary
               });
           }
         }

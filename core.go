@@ -99,7 +99,7 @@ func damageResolve (team teamL/*[]lookup*/, teamD []teamDamage, dmg []float64, m
 
 		}
 		//Heal
-		temp := 6
+		temp := 5
 		teamD[x].Damage[2].Element = &temp
 		teamD[x].Damage[2].Value = dmg[5] * float64(team.Team[x].Stats.RCV) * comboMulti
 		//teamD
