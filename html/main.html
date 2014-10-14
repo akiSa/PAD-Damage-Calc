@@ -547,6 +547,12 @@
           //Then:
           $scope.orbs.orbs[$x] = list
         };
+
+        console.log($scope.orbs.rows)
+        $scope.orbs.rows = $scope.orbs.rows.map(function(k) {
+            return parseInt(k, 10);
+          })
+        
         console.log(JSON.stringify($scope.orbs))
         sock.send(JSON.stringify($scope.orbs))
       }
